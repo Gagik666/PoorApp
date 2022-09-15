@@ -67,27 +67,7 @@ function App() {
       </Stack.Navigator>
     )
   }
-  return (
-    <Stack.Navigator>
-    <Stack.Screen 
-          name = "Dashbord"
-          component={Dashbords}
-          options = {
-            {
-              headerTitle: () => <Header name = "Dasbord" />,
-              headerStyle: {
-                height: 150,
-                borderBottomLeftRadius: 50,
-                borderBottomEndRadius: 50,
-                backgroundColor: '#90e4d0',
-                shadowColor: '#000',
-                elevation: 25
-              }
-             }
-          }
-        />
-      </Stack.Navigator>
-  )
+  
 }
 
 export default () => {

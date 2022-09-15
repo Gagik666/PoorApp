@@ -20,9 +20,11 @@ export const Login = () => {
       alert(error.mesage);
     }
   };
+  
 
   return (
     <View style={styles.container}>
+      
       <Text style={{ fontWeight: "bold", fontSize: 26 }}>Login</Text>
       <View style={{ marginTop: 40 }}>
         <TextInput
