@@ -15,6 +15,7 @@ export const Headers = () => {
                 name="notifications"
                 size={24}
                 color="black" />
+                
         </View>
     )
 }
