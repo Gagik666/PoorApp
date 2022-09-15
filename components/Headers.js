@@ -20,5 +20,5 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         width: "100%",
         backgroundColor: "aqua",
-    },
+    }
 })
