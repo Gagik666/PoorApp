@@ -4,10 +4,9 @@ import { Headers } from "../components/Headers";
 
 export const WorkerPage = () => {
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <Headers />
-            <Text>Gagik666</Text>
-        </SafeAreaView>
+        </View>
     )
 }
 

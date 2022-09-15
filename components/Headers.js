@@ -11,10 +11,17 @@ export const Headers = () => {
                 size={24}
                 color="black"
             />
-            <Ionicons
+
+            <View style = {{flexDirection: 'row'}}>
+                <Ionicons
                 name="notifications"
                 size={24}
-                color="black" />
+                color="green" />
+                <View style = {styles.viewNote}>
+
+                </View>
+            </View>
+            
                 
         </View>
     )
@@ -23,6 +30,16 @@ export const Headers = () => {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        paddingTop: 40
+        paddingTop: 45,
+        paddingHorizontal: 16,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    viewNote: {
+        backgroundColor: "red",
+        height: 6,
+        width: 6,
+        borderRadius: 50,
+        marginLeft: -7
     }
 })
