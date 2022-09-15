@@ -4,7 +4,7 @@ import { Entypo } from '@expo/vector-icons';
 
 export const Headers = () => {
     return (
-        <View style={styles.container}>
+        <View style = {styles.container}>
             <Entypo
                 name="menu"
                 size={24}
@@ -16,9 +16,7 @@ export const Headers = () => {
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: "start",
-        justifyContent: "flex-start",
-        width: "100%",
-        backgroundColor: "aqua",
+        width: '100%',
+        paddingTop: 40
     }
 })

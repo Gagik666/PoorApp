@@ -1,13 +1,13 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView } from "react-native";
 import { Headers } from "../components/Headers";
 
 export const WorkerPage = () => {
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <Headers />
             <Text>Gagik666</Text>
-        </View>
+        </SafeAreaView>
     )
 }
 
