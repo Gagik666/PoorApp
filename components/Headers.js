@@ -16,11 +16,9 @@ export const Headers = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         alignItems: "start",
         justifyContent: "flex-start",
         width: "100%",
         backgroundColor: "aqua",
-        marginBottom: "43%"
     },
 })

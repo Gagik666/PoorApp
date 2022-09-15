@@ -26,7 +26,6 @@ export const Login = () => {
 
   return (
     <View style={styles.container}>
-      <Headers />
       <Text style={{ fontWeight: "bold", fontSize: 26 }}>Login</Text>
       <View style={{ marginTop: 40 }}>
         <TextInput

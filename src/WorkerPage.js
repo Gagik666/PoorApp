@@ -1,9 +1,18 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
+import { Headers } from "../components/Headers";
 
 export const WorkerPage = () => {
     return (
-        <View> 
+        <View style={styles.container}>
+            <Headers />
+            <Text>Gagik666</Text>
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    }
+})

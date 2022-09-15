@@ -6,6 +6,7 @@ import { firebase } from './config'
 import { Login } from "./src/Login";
 import { Registration } from "./src/Registration";
 import { Dashbords } from "./src/Dashbords";
+import { WorkerPage } from "./src/WorkerPage";
 
 
 const Stack = createStackNavigator()
@@ -28,7 +29,7 @@ function App() {
 
   if (!user) {
     return (
-      <Stack.Navigator initialRouteName="SplashScreen">
+      <Stack.Navigator initialRouteName="WorkerPage">
         <Stack.Screen
           name="login"
           component={Login}
@@ -41,6 +42,15 @@ function App() {
         <Stack.Screen
           name="Registration"
           component={Registration}
+          options={
+            {
+              header: (props) => null
+            }
+          }
+        />
+        <Stack.Screen
+          name="WorkerPage"
+          component={WorkerPage}
           options={
             {
               header: (props) => null
