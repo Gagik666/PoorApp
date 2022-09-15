@@ -1,6 +1,7 @@
 import { View, StyleSheet } from "react-native";
 import React from "react";
 import { Entypo } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 export const Headers = () => {
     return (
@@ -10,6 +11,10 @@ export const Headers = () => {
                 size={24}
                 color="black"
             />
+            <Ionicons
+                name="notifications"
+                size={24}
+                color="black" />
         </View>
     )
 }
