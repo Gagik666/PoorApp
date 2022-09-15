@@ -1,0 +1,26 @@
+import { View, StyleSheet } from "react-native";
+import React from "react";
+import { Entypo } from '@expo/vector-icons';
+
+export const Headers = () => {
+    return (
+        <View style={styles.container}>
+            <Entypo
+                name="menu"
+                size={24}
+                color="black"
+            />
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: "start",
+        justifyContent: "flex-start",
+        width: "100%",
+        backgroundColor: "aqua",
+        marginBottom: "43%"
+    },
+})

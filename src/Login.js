@@ -9,6 +9,8 @@ import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { firebase } from "../config";
 
+import { Headers } from "../components/Headers";
+
 export const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
@@ -23,6 +25,7 @@ export const Login = () => {
 
   return (
     <View style={styles.container}>
+      <Headers />
       <Text style={{ fontWeight: "bold", fontSize: 26 }}>Login</Text>
       <View style={{ marginTop: 40 }}>
         <TextInput

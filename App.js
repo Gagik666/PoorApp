@@ -1,12 +1,11 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import React, {useState, useEffect} from "react";
-import {firebase} from './config'
+import React, { useState, useEffect } from "react";
+import { firebase } from './config'
 
 import { Login } from "./src/Login";
 import { Registration } from "./src/Registration";
 import { Dashbords } from "./src/Dashbords";
-import { Header } from "./components/Header";
 
 
 const Stack = createStackNavigator()
@@ -29,39 +28,23 @@ function App() {
 
   if (!user) {
     return (
-      <Stack.Navigator>
-        <Stack.Screen 
-          name = "login"
+      <Stack.Navigator initialRouteName="SplashScreen">
+        <Stack.Screen
+          name="login"
           component={Login}
-          options = {
+          options={
             {
-              headerTitle: () => <Header name = "Bug Ninza" />,
-              headerStyle: {
-                height: 150,
-                borderBottomLeftRadius: 50,
-                borderBottomEndRadius: 50,
-                backgroundColor: '#90e4d0',
-                shadowColor: '#000',
-                elevation: 25
-              }
-             }
+              header: (props) => null
+            }
           }
         />
-        <Stack.Screen 
-          name = "Registration"
+        <Stack.Screen
+          name="Registration"
           component={Registration}
-          options = {
+          options={
             {
-              headerTitle: () => <Header name = "Bug Ninza" />,
-              headerStyle: {
-                height: 150,
-                borderBottomLeftRadius: 50,
-                borderBottomEndRadius: 50,
-                backgroundColor: '#90e4d0',
-                shadowColor: '#000',
-                elevation: 25
-              }
-             }
+              header: (props) => null
+            }
           }
         />
       </Stack.Navigator>
@@ -69,24 +52,16 @@ function App() {
   }
   return (
     <Stack.Navigator>
-    <Stack.Screen 
-          name = "Dashbord"
-          component={Dashbords}
-          options = {
-            {
-              headerTitle: () => <Header name = "Dasbord" />,
-              headerStyle: {
-                height: 150,
-                borderBottomLeftRadius: 50,
-                borderBottomEndRadius: 50,
-                backgroundColor: '#90e4d0',
-                shadowColor: '#000',
-                elevation: 25
-              }
-             }
+      <Stack.Screen
+        name="Dashbord"
+        component={Dashbords}
+        options={
+          {
+            header: (props) => null
           }
-        />
-      </Stack.Navigator>
+        }
+      />
+    </Stack.Navigator>
   )
 }
 
