@@ -16,9 +16,8 @@ export const Headers = () => {
                 <Ionicons
                 name="notifications"
                 size={24}
-                color="green" />
+                color="#d9864b" />
                 <View style = {styles.viewNote}>
-
                 </View>
             </View>
             
