@@ -30,7 +30,7 @@ function App() {
 
   if (!user) {
     return (
-      <Stack.Navigator initialRouteName="ManagerPage">
+      <Stack.Navigator initialRouteName="WorkerPage">
         <Stack.Screen
           name="login"
           component={Login}

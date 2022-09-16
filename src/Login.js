@@ -9,8 +9,6 @@ import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { firebase } from "../config";
 
-import { Headers } from "../components/Headers";
-
 export const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
@@ -65,12 +63,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    marginTop: 100,
   },
   textInput: {
     paddingTop: 20,
     paddingBottom: 20,
-    width: 4000,
+    width: "100%",
     fontSize: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#000",

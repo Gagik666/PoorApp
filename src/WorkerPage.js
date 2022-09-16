@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text, SafeAreaView } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity } from "react-native";
 import { Headers } from "../components/Headers";
 import UserInfo from "../components/UserInfo";
 
@@ -8,6 +9,11 @@ export const WorkerPage = () => {
         <View style={styles.container}>
             <Headers />
             <UserInfo />
+            <View>
+                <TouchableOpacity>
+                    <Text>Click</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }
@@ -15,6 +21,5 @@ export const WorkerPage = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        
     }
 })

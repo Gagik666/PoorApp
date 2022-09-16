@@ -8,7 +8,7 @@ import {
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { firebase } from "../config";
-import { getDatabase, ref, set, onValue} from "firebase/database";
+import { getDatabase, ref, set, onValue } from "firebase/database";
 import { SelectUser } from "../components/SelectUser";
 import { ModalWindow } from "../components/ModalWindow";
 import uuid from "react-native-uuid";
@@ -21,29 +21,34 @@ export const Registration = () => {
   const [lastName, setLastName] = useState("");
   const [inpVisible, setinpVisible] = useState("none");
   const [companyName, setCompanyName] = useState("");
-  const [companyList, setCompanyList] = useState([]);
+  const [company, setCompany] = useState([""]);
+  const [user, setUser] = useState("")
+  const [userPage, setUserPage] = useState("")
   const [modalWindow, setModalWindow] = useState(false);
+
   const registerUser = async (email, password) => {
     try {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(create(firstName, lastName, companyName));
+        .then(create(firstName, lastName, companyName, user));
     } catch (error) {
       alert(error.mesage);
     }
+    navigation.navigate(userPage)
   };
 
-  const create = (firstName, lastName, companyName) => {
+  const create = (firstName, lastName, companyName, user) => {
     let uid = `${firstName}${uuid.v4()}`;
     const db = getDatabase();
     set(ref(db, "users/" + uid), {
       firstName: firstName,
       lastName: lastName,
       companyName: companyName,
+      user: user
     });
 
-    if (inpVisible == "") {
+    if (inpVisible == "flex") {
       set(ref(db, "company/" + companyName), {
         companyName: companyName,
       });
@@ -51,31 +56,42 @@ export const Registration = () => {
   };
 
   const selectManager = () => {
-    const db = getDatabase();
-
     if (inpVisible == "none") {
-      setinpVisible("");
+      setinpVisible("flex");
+      setUser("Manager")
     } else {
       setinpVisible("none");
+      setUser("")
     }
-
-    const sRef = ref(db, "company/")
-    onValue(sRef, (sp) => {
-      const data = sp.size
-      sp.forEach(i => {
-        setCompanyList([...companyList, i.key])
-      })
-    })
   };
   const selectWorker = () => {
     if (modalWindow == false) {
       setModalWindow(true);
+      setUser("Worker")
+      setUserPage("WorkerPage")
     } else {
       setModalWindow(false);
     }
-
-    
+    setCompany("")
+    CompanyName()
   };
+
+  const CompanyName = () => {
+    const db = getDatabase();
+    const sRef = ref(db, "company/");
+    onValue(sRef, (sp) => {
+      sp.forEach((i) => {
+        setCompany( prev => [...prev, {id: uuid.v4(), text: i.key}]);
+      });
+    });
+  };
+
+  const selectCompany = (company, user) => {
+    setCompanyName(company)
+    setUser(user)
+  }
+
+
   return (
     <View style={styles.container}>
       <View style={{ marginTop: 40 }}>
@@ -115,8 +131,8 @@ export const Registration = () => {
           autoCorrect={false}
         />
       </View>
-      <SelectUser selectManager={selectManager} selectWorker={selectWorker} companyList = {companyList}/>
-      <ModalWindow mWindow={modalWindow} selectWorker={selectWorker} />
+      <SelectUser selectManager={selectManager} selectWorker={selectWorker} />
+      <ModalWindow mWindow={modalWindow} selectWorker={selectWorker} cmpanyName = {company} selectCompany = {selectCompany}/>
       <TouchableOpacity
         onPress={() => registerUser(email, password)}
         style={styles.button}
