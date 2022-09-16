@@ -7,6 +7,7 @@ import { Login } from "./src/Login";
 import { Registration } from "./src/Registration";
 import { Dashbords } from "./src/Dashbords";
 import { WorkerPage } from "./src/WorkerPage";
+import { ManagerPage } from "./src/ManagerPage";
 
 
 const Stack = createStackNavigator()
@@ -29,7 +30,7 @@ function App() {
 
   if (!user) {
     return (
-      <Stack.Navigator initialRouteName="WorkerPage">
+      <Stack.Navigator initialRouteName="ManagerPage">
         <Stack.Screen
           name="login"
           component={Login}
@@ -51,6 +52,15 @@ function App() {
         <Stack.Screen
           name="WorkerPage"
           component={WorkerPage}
+          options={
+            {
+              header: (props) => null
+            }
+          }
+        />
+        <Stack.Screen
+          name="ManagerPage"
+          component={ManagerPage}
           options={
             {
               header: (props) => null
