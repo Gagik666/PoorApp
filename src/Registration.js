@@ -23,7 +23,9 @@ export const Registration = () => {
   const [companyName, setCompanyName] = useState("");
   const [company, setCompany] = useState([""]);
   const [user, setUser] = useState("")
+  const [userPage, setUserPage] = useState("")
   const [modalWindow, setModalWindow] = useState(false);
+
   const registerUser = async (email, password) => {
     try {
       firebase
@@ -33,6 +35,7 @@ export const Registration = () => {
     } catch (error) {
       alert(error.mesage);
     }
+    navigation.navigate(userPage)
   };
 
   const create = (firstName, lastName, companyName, user) => {
@@ -65,6 +68,7 @@ export const Registration = () => {
     if (modalWindow == false) {
       setModalWindow(true);
       setUser("Worker")
+      setUserPage("WorkerPage")
     } else {
       setModalWindow(false);
     }
@@ -131,7 +135,6 @@ export const Registration = () => {
       <ModalWindow mWindow={modalWindow} selectWorker={selectWorker} cmpanyName = {company} selectCompany = {selectCompany}/>
       <TouchableOpacity
         onPress={() => registerUser(email, password)}
-        // onPress={() => CompanyName()}
         style={styles.button}
       >
         <Text style={{ fontWeight: "bool", fontSize: 22 }}>Registration</Text>
