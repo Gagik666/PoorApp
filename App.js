@@ -29,7 +29,7 @@ function App() {
 
   if (!user) {
     return (
-      <Stack.Navigator initialRouteName="WorkerPage">
+      <Stack.Navigator >
         <Stack.Screen
           name="login"
           component={Login}
