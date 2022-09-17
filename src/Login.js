@@ -20,12 +20,11 @@ export const Login = () => {
       alert(error.mesage);
     }
   };
-  
 
   return (
     <View style={styles.container}>
       <Text style={{ fontWeight: "bold", fontSize: 26 }}>Login</Text>
-      <View style={{ marginTop: 40 }}>
+
         <TextInput
           style={styles.textInput}
           placeholder="Email"
@@ -40,7 +39,6 @@ export const Login = () => {
           autoCapitalize="name"
           secureTextEntry={true}
         />
-      </View>
       <TouchableOpacity
         onPress={() => loginUser(email, password)}
         style={styles.button}
@@ -63,16 +61,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    marginTop: 100,
+    backgroundColor:'#222222',
   },
   textInput: {
-    paddingTop: 20,
-    paddingBottom: 20,
-    width: "100%",
-    fontSize: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#000",
-    marginBottom: 10,
-    textAlign: "center",
+    width:'85%',
+    height: 50,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+    marginHorizontal:20,
+    borderRadius:8,
   },
   button: {
     marginTop: 50,
