@@ -8,6 +8,8 @@ import { Registration } from "./src/Registration";
 import { Dashbords } from "./src/Dashbords";
 import { WorkerPage } from "./src/WorkerPage";
 import { ManagerPage } from "./src/ManagerPage";
+import { UserItem } from "./components/Items/UserItem";
+import { WorkersList } from "./components/Lists/WorkersList";
 
 
 const Stack = createStackNavigator()
@@ -30,7 +32,7 @@ function App() {
 
   if (!user) {
     return (
-      <Stack.Navigator initialRouteName="ManagerPage">
+      <Stack.Navigator initialRouteName="WorkersList">
         <Stack.Screen
           name="login"
           component={Login}
@@ -61,6 +63,24 @@ function App() {
         <Stack.Screen
           name="ManagerPage"
           component={ManagerPage}
+          options={
+            {
+              header: (props) => null
+            }
+          }
+        />
+        <Stack.Screen
+          name="UserItem"
+          component={UserItem}
+          options={
+            {
+              header: (props) => null
+            }
+          }
+        />
+        <Stack.Screen
+          name="WorkersList"
+          component={WorkersList}
           options={
             {
               header: (props) => null
