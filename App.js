@@ -8,12 +8,9 @@ import { Registration } from "./src/Registration";
 import { Dashbords } from "./src/Dashbords";
 import { WorkerPage } from "./src/WorkerPage";
 import { ManagerPage } from "./src/ManagerPage";
-<<<<<<< HEAD
 import { GetLocation } from "./src/MapPage";
-=======
 import { UserItem } from "./components/Items/UserItem";
 import { WorkersList } from "./components/Lists/WorkersList";
->>>>>>> d0cc1ec9632e6fc8c2f3753f97dac208b78baeaf
 
 const Stack = createStackNavigator();
 
