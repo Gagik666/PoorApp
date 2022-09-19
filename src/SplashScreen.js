@@ -1,18 +1,26 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { Image, View, StyleSheet } from "react-native";
 
+export const SplashScreen = ({ navigation }) => {
 
-export const SplashScreen = () => {
-    const navigation = useNavigation();
-    navigation.navigate("login")
-    
-    
+    setTimeout(function () { navigation.navigate("login") }, 3000)
     return (
-        <View>
-            <Text>
-                SplashScreen
-            </Text>
+        <View style={styles.container}>
+            <Image
+                style={styles.image}
+                source={require('../images/logo.png')} />
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    image: {
+        width: 100,
+        height: 100
+    }
+})
