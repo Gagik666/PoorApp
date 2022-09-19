@@ -3,20 +3,7 @@ import React, { useState } from 'react'
 import { firebase } from "../config";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 
-const UserInfo = () => {
-  
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-
-    const getUserInfo = () => {
-        const db = getDatabase();
-        onValue(ref(db, '/users/' + firebase.auth().currentUser.uid), (r) => {
-            setFirstName(r.val().firstName);
-            setLastName(r.val().lastName)
-        })
-      };
-
-      setTimeout(function(){getUserInfo()}, 2000)
+export const WorkerInfo = ({firstName, lastName}) => {
     return (
         <View style={styles.container}>
             <View style={styles.imageView}>
@@ -32,9 +19,6 @@ const UserInfo = () => {
         </View>
     )
 }
-
-export default UserInfo
-
 const styles = StyleSheet.create({
     container: {
         width: "100%",
@@ -42,13 +26,11 @@ const styles = StyleSheet.create({
         paddingTop: 16
     },
     image: {
-        width: 120,
-        height: 120
+        width: 80,
+        height: 80
     },
     imageView: {
         justifyContent: 'center',
-        width: 120,
-        height: 120,
         borderRadius: 150
     },
     textView: {

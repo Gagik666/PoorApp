@@ -25,13 +25,12 @@ export const Registration = () => {
   const [user, setUser] = useState("")
   const [userPage, setUserPage] = useState("")
   const [modalWindow, setModalWindow] = useState(false);
-
   const registerUser = async (email, password) => {
     try {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(create(firstName, lastName, companyName, user));
+        .then(setTimeout(function(){create(firstName, lastName, companyName, user)}, 2000));
     } catch (error) {
       alert(error.mesage);
     }
@@ -39,9 +38,10 @@ export const Registration = () => {
   };
 
   const create = (firstName, lastName, companyName, user) => {
-    let uid = `${firstName}${uuid.v4()}`;
+    
+    
     const db = getDatabase();
-    set(ref(db, "users/" + uid), {
+    set(ref(db, "users/" + firebase.auth().currentUser.uid), {
       firstName: firstName,
       lastName: lastName,
       companyName: companyName,
@@ -59,6 +59,7 @@ export const Registration = () => {
     if (inpVisible == "none") {
       setinpVisible("flex");
       setUser("Manager")
+      setUserPage("ManagerPage")
     } else {
       setinpVisible("none");
       setUser("")

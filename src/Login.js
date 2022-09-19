@@ -8,6 +8,7 @@ import {
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { firebase } from "../config";
+import { getDatabase, ref, set, onValue } from "firebase/database";
 
 export const Login = () => {
   const navigation = useNavigation();
@@ -15,11 +16,20 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   loginUser = async (email, password) => {
     try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
+      await firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(getUserInfo())
     } catch (error) {
       alert(error.mesage);
     }
   };
+  
+
+    const getUserInfo = () => {
+      const db = getDatabase();
+      onValue(ref(db, '/users/' + firebase.auth().currentUser.uid), (r) => {
+          navigation.navigate(`${r.val().user}Page`)
+      })
+    };
   
 
   return (

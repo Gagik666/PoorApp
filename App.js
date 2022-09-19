@@ -28,9 +28,8 @@ function App() {
 
   if (initializing) return null
 
-  if (!user) {
     return (
-      <Stack.Navigator initialRouteName="WorkerPage">
+      <Stack.Navigator  >
         <Stack.Screen
           name="login"
           component={Login}
@@ -58,10 +57,10 @@ function App() {
             }
           }
         />
-        <Stack.Screen
-          name="ManagerPage"
+        <Stack.Screen 
+          name = "ManagerPage"
           component={ManagerPage}
-          options={
+          options = {
             {
               header: (props) => null
             }
@@ -70,20 +69,7 @@ function App() {
       </Stack.Navigator>
     )
   }
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Dashbord"
-        component={Dashbords}
-        options={
-          {
-            header: (props) => null
-          }
-        }
-      />
-    </Stack.Navigator>
-  )
-}
+
 
 export default () => {
   return (
