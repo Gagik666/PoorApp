@@ -13,7 +13,6 @@ export const WorkerList = ({company}) => {
     onValue(dbRef, (res) => {
       res.forEach((childRes) => {
         if (childRes.val().user == "Worker" && company == childRes.val().companyName) {
-          console.log("stacvec");
           setWorker(prev => [ 
             ...prev,
             {
@@ -26,7 +25,7 @@ export const WorkerList = ({company}) => {
       });
     });
   };
-  useEffect(() => {
+  useEffect( () => {
     setTimeout(function(){getUserList()}, 2000)
   }, [])
  

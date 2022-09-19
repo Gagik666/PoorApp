@@ -22,35 +22,39 @@ export const Registration = () => {
   const [inpVisible, setinpVisible] = useState("none");
   const [companyName, setCompanyName] = useState("");
   const [company, setCompany] = useState([""]);
-  const [user, setUser] = useState("")
-  const [userPage, setUserPage] = useState("")
+  const [user, setUser] = useState("");
+  const [userPage, setUserPage] = useState("");
   const [modalWindow, setModalWindow] = useState(false);
   const registerUser = async (email, password) => {
     try {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(setTimeout(function(){create(firstName, lastName, companyName, user)}, 2000));
+        .then(
+          setTimeout(function () {
+            create(firstName, lastName, companyName, user);
+          }, 2000)
+        );
     } catch (error) {
       alert(error.mesage);
     }
-    navigation.navigate(userPage)
+    navigation.navigate(userPage);
   };
 
   const create = (firstName, lastName, companyName, user) => {
-    
-    
     const db = getDatabase();
     set(ref(db, "users/" + firebase.auth().currentUser.uid), {
       firstName: firstName,
       lastName: lastName,
       companyName: companyName,
-      user: user
+      user: user,
     });
 
     if (inpVisible == "flex") {
       set(ref(db, "company/" + companyName), {
         companyName: companyName,
+        latitude: 0,
+        longitude: 0,
       });
     }
   };
@@ -58,23 +62,23 @@ export const Registration = () => {
   const selectManager = () => {
     if (inpVisible == "none") {
       setinpVisible("flex");
-      setUser("Manager")
-      setUserPage("ManagerPage")
+      setUser("Manager");
+      setUserPage("MapPage");
     } else {
       setinpVisible("none");
-      setUser("")
+      setUser("");
     }
   };
   const selectWorker = () => {
     if (modalWindow == false) {
       setModalWindow(true);
-      setUser("Worker")
-      setUserPage("WorkerPage")
+      setUser("Worker");
+      setUserPage("WorkerPage");
     } else {
       setModalWindow(false);
     }
-    setCompany("")
-    CompanyName()
+    setCompany("");
+    CompanyName();
   };
 
   const CompanyName = () => {
@@ -82,16 +86,15 @@ export const Registration = () => {
     const sRef = ref(db, "company/");
     onValue(sRef, (sp) => {
       sp.forEach((i) => {
-        setCompany( prev => [...prev, {id: uuid.v4(), text: i.key}]);
+        setCompany((prev) => [...prev, { id: uuid.v4(), text: i.key }]);
       });
     });
   };
 
   const selectCompany = (company, user) => {
-    setCompanyName(company)
-    setUser(user)
-  }
-
+    setCompanyName(company);
+    setUser(user);
+  };
 
   return (
     <View style={styles.container}>
@@ -133,7 +136,12 @@ export const Registration = () => {
         />
       </View>
       <SelectUser selectManager={selectManager} selectWorker={selectWorker} />
-      <ModalWindow mWindow={modalWindow} selectWorker={selectWorker} cmpanyName = {company} selectCompany = {selectCompany}/>
+      <ModalWindow
+        mWindow={modalWindow}
+        selectWorker={selectWorker}
+        cmpanyName={company}
+        selectCompany={selectCompany}
+      />
       <TouchableOpacity
         onPress={() => registerUser(email, password)}
         style={styles.button}

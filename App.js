@@ -5,12 +5,12 @@ import { firebase } from "./config";
 
 import { Login } from "./src/Login";
 import { Registration } from "./src/Registration";
-import { Dashbords } from "./src/Dashbords";
 import { WorkerPage } from "./src/WorkerPage";
 import { ManagerPage } from "./src/ManagerPage";
 import { GetLocation } from "./src/MapPage";
 import { UserItem } from "./components/Items/UserItem";
 import  WorkersList  from "./components/Lists/WorkersList";
+import { SplashScreen } from "./src/SplashScreen";
 
 const Stack = createStackNavigator();
 
@@ -31,15 +31,17 @@ function App() {
   if (initializing) return null;
 
     return (
-<<<<<<< HEAD
-      <Stack.Navigator  >
-=======
-      <Stack.Navigator initialRouteName="WorkersList">
-
->>>>>>> f82e297a5903c3b528e2a61b82802ef01c287588
+      <Stack.Navigator initialRouteName="SplashScreen">
         <Stack.Screen
           name="login"
           component={Login}
+          options={{
+            header: (props) => null,
+          }}
+        />
+        <Stack.Screen
+          name="SplashScreen"
+          component={SplashScreen}
           options={{
             header: (props) => null,
           }}
@@ -81,42 +83,10 @@ function App() {
             }
           }
         />
-<<<<<<< HEAD
-        <Stack.Screen 
-          name = "ManagerPage"
-          component={ManagerPage}
-          options = {
-=======
-        <Stack.Screen
-          name="WorkersList"
-          component={WorkersList}
-          options={
->>>>>>> f82e297a5903c3b528e2a61b82802ef01c287588
-            {
-              header: (props) => null
-            }
-          }
-        />
       </Stack.Navigator>
     );
   }
-<<<<<<< HEAD
-
-=======
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Dashbord"
-        component={Dashbords}
-        options={{
-          header: (props) => null,
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
->>>>>>> f82e297a5903c3b528e2a61b82802ef01c287588
-
+ 
 export default () => {
   return (
     <NavigationContainer>

@@ -1,5 +1,7 @@
 import * as React from "react";
 import MapView, { Marker, Polyline } from "react-native-maps";
+import { firebase } from "../config";
+import { getDatabase, ref, set, onValue } from "firebase/database";
 import {
   StyleSheet,
   View,
@@ -10,7 +12,22 @@ import {
 import * as Location from 'expo-location'
 
 export const GetLocation = () => {
+const [company, setCompany] = React.useState
+const [companyLat, setCompanyLat] = React.useState
+const [companyLong, setCompanyLong] = React.useState
 
+  // const getCompanyInfo = () => {
+
+  //   const db = getDatabase();
+  //   onValue(ref(db, '/users/' + firebase.auth().currentUser.uid), (r) => {
+  //    setCompany(r.val().companyName)
+  // })
+
+  //   onValue(ref(db, `/users/${company}`, (r) => {
+  //     setCompanyLat(r.val().latitude)
+  //     setCompanyLong(r.val().longitude)
+  //   })
+  // }
     
   const [orgin, setOrgin] = React.useState({
     latitude: 40.0,

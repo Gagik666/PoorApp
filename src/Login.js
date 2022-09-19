@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     marginTop: 100,
-    backgroundColor:'#222222',
   },
   textInput: {
     width:'85%',

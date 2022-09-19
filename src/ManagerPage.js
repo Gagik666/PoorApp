@@ -23,6 +23,7 @@ export const ManagerPage = () => {
     return (
         <View>
             <Headers />
+            
             <UserInfo />
             <SearchBar />
 
