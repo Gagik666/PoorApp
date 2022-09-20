@@ -12,9 +12,9 @@ import {
 import * as Location from 'expo-location'
 
 export const GetLocation = () => {
-const [company, setCompany] = React.useState
-const [companyLat, setCompanyLat] = React.useState
-const [companyLong, setCompanyLong] = React.useState
+// const [company, setCompany] = React.useState
+// const [companyLat, setCompanyLat] = React.useState
+// const [companyLong, setCompanyLong] = React.useState
 
   // const getCompanyInfo = () => {
 

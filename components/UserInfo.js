@@ -8,7 +8,7 @@ const UserInfo = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
-    const getUserInfo = () => {
+  const getUserInfo = () => {
         const db = getDatabase();
         onValue(ref(db, '/users/' + firebase.auth().currentUser.uid), (r) => {
             setFirstName(r.val().firstName);
