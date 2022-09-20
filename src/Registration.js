@@ -63,7 +63,7 @@ export const Registration = () => {
     if (inpVisible == "none") {
       setinpVisible("flex");
       setUser("Manager");
-      setUserPage("MapPage");
+      setUserPage("ManagerPage");
     } else {
       setinpVisible("none");
       setUser("");

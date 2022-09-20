@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { firebase } from "../config";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 
@@ -16,7 +16,8 @@ const UserInfo = () => {
         })
       };
 
-      setTimeout(function(){getUserInfo()}, 2000)
+      
+      useEffect(() => {getUserInfo()}, [])
     return (
         <View style={styles.container}>
             <View style={styles.imageView}>

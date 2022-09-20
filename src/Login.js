@@ -14,6 +14,7 @@ export const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  console.log(firebase.auth().currentUser);
   loginUser = async (email, password) => {
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password)

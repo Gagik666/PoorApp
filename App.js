@@ -9,7 +9,6 @@ import { WorkerPage } from "./src/WorkerPage";
 import { ManagerPage } from "./src/ManagerPage";
 import { GetLocation } from "./src/MapPage";
 import { UserItem } from "./components/Items/UserItem";
-import  WorkersList  from "./components/Lists/WorkersList";
 import { SplashScreen } from "./src/SplashScreen";
 
 const Stack = createStackNavigator();

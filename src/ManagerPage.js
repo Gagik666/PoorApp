@@ -1,4 +1,4 @@
-import react, { useState } from "react";
+import react, { useEffect, useState } from "react";
 import { Button, View } from "react-native";
 import { Headers } from "../components/Headers";
 import SearchBar from "../components/SearchBar";
@@ -11,19 +11,23 @@ export const ManagerPage = () => {
 
     const [company, setCompany] = useState("")
 
-    const getMAnagerInfo = () => {
+    const getManagerInfo = () => {
         const db = getDatabase();
         onValue(ref(db, '/users/' + firebase.auth().currentUser.uid), (r) => {
             setCompany(r.val().companyName);
         })
       };
 
-      setTimeout(function(){getMAnagerInfo()}, 2000)
+      useEffect(() => {
+        getManagerInfo()
+      }, [])
 
+      
+      
     return (
         <View>
             <Headers />
-            
+
             <UserInfo />
             <SearchBar />
 

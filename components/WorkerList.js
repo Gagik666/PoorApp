@@ -4,16 +4,20 @@ import { getDatabase, ref, set, onValue } from "firebase/database";
 import uuid from "react-native-uuid";
 import { WorkerInfo } from "./WorkerInfo";
 
-export const WorkerList = ({company}) => {
-  const [worker, setWorker] = useState([""]);
+export const WorkerList = ({ company }) => {
+  const [worker, setWorker] = useState([]);
+  const [loading, setLoading] = useState(false)
   const getUserList = () => {
-    
     const db = getDatabase();
     const dbRef = ref(db, "/users/");
     onValue(dbRef, (res) => {
+      setLoading(true)
       res.forEach((childRes) => {
-        if (childRes.val().user == "Worker" && company == childRes.val().companyName) {
-          setWorker(prev => [ 
+        if (
+          childRes.val().user == "Worker" &&
+          company == childRes.val().companyName
+        ) {
+          setWorker((prev) => [
             ...prev,
             {
               id: uuid.v4(),
@@ -23,19 +27,22 @@ export const WorkerList = ({company}) => {
           ]);
         }
       });
-    });
+    })
   };
-  useEffect( () => {
-    setTimeout(function(){getUserList()}, 2000)
-  }, [])
- 
+  console.log(loading);
+  useEffect(() => {
+      getUserList();
+  }, [loading]);
+
+
   return (
     <View>
-      <FlatList 
+      <FlatList
         data={worker}
         keyExtractor={(item) => item.id}
-        renderItem = {({item}) => <WorkerInfo  firstName = {item.firstName} lastName = {item.lastName}/>
-        }
+        renderItem={({ item }) => (
+          <WorkerInfo firstName={item.firstName} lastName={item.lastName} />
+        )}
       />
     </View>
   );
