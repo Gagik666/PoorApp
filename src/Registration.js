@@ -33,7 +33,7 @@ export const Registration = () => {
         .then(
           setTimeout(function () {
             create(firstName, lastName, companyName, user);
-          }, 2000)
+          }, 3000)
         );
     } catch (error) {
       alert(error.mesage);
@@ -48,6 +48,7 @@ export const Registration = () => {
       lastName: lastName,
       companyName: companyName,
       user: user,
+      stat: 0
     });
 
     if (inpVisible == "flex") {
@@ -130,7 +131,7 @@ export const Registration = () => {
         <TextInput
           style={[styles.textInput, { display: inpVisible }]}
           placeholder="Company name"
-          onChangeText={(companyName) => setCompanyName(companyName)}
+          onChangeText={(text) => setCompanyName(text)}
           autoCapitalize="none"
           autoCorrect={false}
         />

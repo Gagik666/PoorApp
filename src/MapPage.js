@@ -1,58 +1,67 @@
-import * as React from "react";
 import MapView, { Marker, Polyline } from "react-native-maps";
+import React, { useEffect, useState } from "react";
 import { firebase } from "../config";
-import { getDatabase, ref, set, onValue } from "firebase/database";
-import {
-  StyleSheet,
-  View,
-  Text,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
-import * as Location from 'expo-location'
+import { getDatabase, ref, set, onValue, update } from "firebase/database";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import * as Location from "expo-location";
 
 export const GetLocation = () => {
-// const [company, setCompany] = React.useState
-// const [companyLat, setCompanyLat] = React.useState
-// const [companyLong, setCompanyLong] = React.useState
+  const [company, setCompany] = useState("");
+  const [companyLat, setCompanyLat] = useState(40);
+  const [companyLong, setCompanyLong] = useState(40);
 
-  // const getCompanyInfo = () => {
+  useEffect(() => {
+    if (firebase.auth().currentUser !== null) {
+      getCompanyInfo();
+    } 
+  });
 
-  //   const db = getDatabase();
-  //   onValue(ref(db, '/users/' + firebase.auth().currentUser.uid), (r) => {
-  //    setCompany(r.val().companyName)
-  // })
+  const getCompanyInfo = () => {
+    const db = getDatabase();
+    onValue(ref(db, "/users/" + firebase.auth().currentUser.uid), (r) => {
+      setCompany(r.val().companyName);
+    });
 
-  //   onValue(ref(db, `/users/${company}`, (r) => {
-  //     setCompanyLat(r.val().latitude)
-  //     setCompanyLong(r.val().longitude)
-  //   })
-  // }
+    //  onValue(
+    //   ref(db, `/users/${company}`, (r) => {
+    //     setCompanyLat(r.val().latitude);
+    //     setCompanyLong(r.val().longitude);
+    //   })
+    // );
     
+  };
+
+  const updateCompanyInfo = () => {
+    const db = getDatabase();
+    update(ref(db, "company/" + company), {
+      latitude: ("" +companyLat).slice(0, 7),
+      longitude: ("" + companyLong).slice(0, 7),
+    }).catch((err) => {
+      alert(err);
+    });
+  };
+
   const [orgin, setOrgin] = React.useState({
     latitude: 40.0,
     longitude: 45.0,
   });
 
-  const [lat, setLat] = React.useState(0)
-  const [long, setLong] = React.useState(0)
-
- React.useEffect(() => {
+  React.useEffect(() => {
     (async () => {
-        try {
-            await Location.requestForegroundPermissionsAsync();
-            const {
-              coords: { latitude, longitude },
-            } = await Location.getCurrentPositionAsync();
-            setOrgin({
-                latitude: latitude,
-                longitude: longitude,
-              })
-            console.log(lat, long);
-          } catch (error) {
-            alert("error", "eror location");
-          }
-
+      try {
+        await Location.requestForegroundPermissionsAsync();
+        const {
+          coords: { latitude, longitude },
+        } = await Location.getCurrentPositionAsync();
+        setCompanyLat(latitude);
+        setCompanyLong(longitude);
+        setOrgin({
+          latitude: latitude,
+          longitude: longitude,
+        });
+      } catch (error) {
+        alert("error", "eror location");
+      }
     })();
   }, []);
 
@@ -79,9 +88,7 @@ export const GetLocation = () => {
           alignItems: "center",
           justifyContent: "center",
         }}
-        onPress={() => {
-        
-        }}
+        onPress={() => updateCompanyInfo()}
       >
         <Text style={styles.btnStyle}>Save Selected Location</Text>
       </TouchableOpacity>

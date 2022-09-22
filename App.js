@@ -26,7 +26,7 @@ function App() {
     return subscriber;
   }, []);
 
-  if (initializing) return null;
+  // if (initializing) return null;
 
     return (
       <Stack.Navigator initialRouteName="SplashScreen">
