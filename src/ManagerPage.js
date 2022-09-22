@@ -17,7 +17,6 @@ export const ManagerPage = () => {
             setCompany(r.val().companyName);
         })
       };
-
       useEffect(() => {
         getManagerInfo()
       }, [])
@@ -27,10 +26,7 @@ export const ManagerPage = () => {
     return (
         <View>
             <Headers />
-
             <UserInfo />
-            <SearchBar />
-
             <WorkerList company = {company} />
         </View>
     )
