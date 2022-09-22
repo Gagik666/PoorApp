@@ -1,18 +1,20 @@
 import MapView, { Marker, Polyline } from "react-native-maps";
 import React, { useEffect, useState } from "react";
 import { firebase } from "../config";
-import { getDatabase, ref, set, onValue, update } from "firebase/database";
+import { getDatabase, ref, onValue, update } from "firebase/database";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import * as Location from "expo-location";
+import { useNavigation } from "@react-navigation/native";
 
 export const GetLocation = () => {
+  const navigation = useNavigation();
   const [company, setCompany] = useState("");
   const [companyLat, setCompanyLat] = useState(40);
   const [companyLong, setCompanyLong] = useState(40);
 
   useEffect(() => {
     if (firebase.auth().currentUser !== null) {
-      getCompanyInfo();
+      setTimeout(() => {getCompanyInfo()}, 3000)
     } 
   });
 
@@ -21,14 +23,6 @@ export const GetLocation = () => {
     onValue(ref(db, "/users/" + firebase.auth().currentUser.uid), (r) => {
       setCompany(r.val().companyName);
     });
-
-    //  onValue(
-    //   ref(db, `/users/${company}`, (r) => {
-    //     setCompanyLat(r.val().latitude);
-    //     setCompanyLong(r.val().longitude);
-    //   })
-    // );
-    
   };
 
   const updateCompanyInfo = () => {
@@ -39,12 +33,17 @@ export const GetLocation = () => {
     }).catch((err) => {
       alert(err);
     });
+
+    navigation.navigate("ManagerPage")
   };
 
   const [orgin, setOrgin] = React.useState({
     latitude: 40.0,
     longitude: 45.0,
   });
+
+
+  
 
   React.useEffect(() => {
     (async () => {
