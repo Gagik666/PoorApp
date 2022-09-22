@@ -16,8 +16,6 @@ export const ModalWindow = ({
   cmpanyName,
   selectCompany,
 }) => {
-  console.log(` tst ${cmpanyName}`);
-
   return (
     <Modal visible={mWindow}>
       <View style={styles.container}>

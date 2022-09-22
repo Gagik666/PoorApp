@@ -4,7 +4,6 @@ import { firebase } from "../config";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 
 export const WorkerInfo = ({firstName, lastName}) => {
-    console.log("stacvec");
     return (
         <View style={styles.container}>
             <View style={styles.imageView}>

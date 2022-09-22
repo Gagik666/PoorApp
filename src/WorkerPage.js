@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
+
 import { StyleSheet, View, Button, TouchableOpacity, Text } from "react-native";
 import { Headers } from "../components/Headers";
 import UserInfo from "../components/UserInfo";

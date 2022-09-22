@@ -29,7 +29,6 @@ export const WorkerList = ({ company }) => {
       });
     })
   };
-  console.log(loading);
   useEffect(() => {
       getUserList();
   }, [loading]);
