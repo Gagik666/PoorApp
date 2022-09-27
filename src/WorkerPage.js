@@ -13,7 +13,7 @@ export const WorkerPage = () => {
   const [lat, setLat] = useState(2);
   const [companyLong, setCompanyLong] = useState(3);
   const [long, setLong] = useState(4);
-  const [color, setColor] = useState("red");
+  const [color, setColor] = useState("gray");
   useEffect(() => {
     if (firebase.auth().currentUser !== null) {
       getCompanyInfo();
@@ -64,7 +64,7 @@ export const WorkerPage = () => {
       console.log("update color");
       setColor("green")
     } else {
-      console.log("error on");
+      setColor("red")
     }
      
   }

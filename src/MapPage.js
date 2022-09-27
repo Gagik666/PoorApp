@@ -11,16 +11,21 @@ export const GetLocation = () => {
   const [company, setCompany] = useState("");
   const [companyLat, setCompanyLat] = useState(40);
   const [companyLong, setCompanyLong] = useState(40);
+  const [uid, setUid] = useState("");
 
   useEffect(() => {
-    if (firebase.auth().currentUser !== null) {
-      setTimeout(() => {getCompanyInfo()}, 3000)
-    } 
+    setUid(firebase.auth().currentUser.uid)
+  })
+
+  useEffect(() => {
+    getCompanyInfo();
+    console.log(uid);
+    console.log(company);
   });
 
   const getCompanyInfo = () => {
     const db = getDatabase();
-    onValue(ref(db, "/users/" + firebase.auth().currentUser.uid), (r) => {
+    onValue(ref(db, "/users/" + uid), (r) => {
       setCompany(r.val().companyName);
     });
   };
@@ -28,22 +33,19 @@ export const GetLocation = () => {
   const updateCompanyInfo = () => {
     const db = getDatabase();
     update(ref(db, "company/" + company), {
-      latitude: ("" +companyLat).slice(0, 7),
+      latitude: ("" + companyLat).slice(0, 7),
       longitude: ("" + companyLong).slice(0, 7),
     }).catch((err) => {
       alert(err);
     });
 
-    navigation.navigate("ManagerPage")
+    navigation.navigate("ManagerPage");
   };
 
   const [orgin, setOrgin] = React.useState({
     latitude: 40.0,
     longitude: 45.0,
   });
-
-
-  
 
   React.useEffect(() => {
     (async () => {

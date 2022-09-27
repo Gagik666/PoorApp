@@ -21,6 +21,8 @@ const UserInfo = () => {
     } 
   });
 
+
+
   
   return (
     <View style={styles.container}>

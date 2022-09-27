@@ -5,7 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { firebase } from "../config";
 import { getDatabase, ref, set, onValue } from "firebase/database";
@@ -25,21 +25,19 @@ export const Registration = () => {
   const [user, setUser] = useState("");
   const [userPage, setUserPage] = useState("");
   const [modalWindow, setModalWindow] = useState(false);
+
   const registerUser = async (email, password) => {
     try {
-      firebase
+      await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(
-          setTimeout(function () {
-            create(firstName, lastName, companyName, user);
-          }, 3000)
-        );
+        .then(() => {
+          create(firstName, lastName, companyName, user)
+        });
     } catch (error) {
-      alert(error.mesage);
+      alert(error);
     }
-    navigation.navigate(userPage);
-  };
+  };    
 
   const create = (firstName, lastName, companyName, user) => {
     const db = getDatabase();
@@ -48,7 +46,10 @@ export const Registration = () => {
       lastName: lastName,
       companyName: companyName,
       user: user,
-      stat: 0
+      stat: 0,
+      saveLocation: "flex"
+    }).then(() => {
+      navigation.navigate(userPage)
     });
 
     if (inpVisible == "flex") {
@@ -64,7 +65,7 @@ export const Registration = () => {
     if (inpVisible == "none") {
       setinpVisible("flex");
       setUser("Manager");
-      setUserPage("MapPage");
+      setUserPage("ManagerPage");
     } else {
       setinpVisible("none");
       setUser("");

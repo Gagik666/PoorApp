@@ -1,23 +1,58 @@
 import React, { useEffect, useState } from "react";
-import { Button, FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  TextInput,
+  View,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 import uuid from "react-native-uuid";
 import { WorkerInfo } from "./WorkerInfo";
 
 export const WorkerList = ({ company }) => {
-  const [worker, setWorker] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const [filteredDataSource, setFilteredDataSource] = useState([]);
+  const [masterDataSource, setMasterDataSource] = useState([]);
+
+  const searchFilterFunction = (text) => {
+    if (text) {
+      const newData = masterDataSource.filter(function (item) {
+        const itemData = item.firstName
+          ? item.firstName.toUpperCase()
+          : "".toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredDataSource(newData);
+      setSearch(text);
+    } else {
+      setFilteredDataSource(masterDataSource);
+      setSearch(text);
+    }
+  };
+
   const getUserList = () => {
     const db = getDatabase();
     const dbRef = ref(db, "/users/");
     onValue(dbRef, (res) => {
-      setLoading(true)
+      setLoading(true);
       res.forEach((childRes) => {
         if (
           childRes.val().user == "Worker" &&
           company == childRes.val().companyName
         ) {
-          setWorker((prev) => [
+          setMasterDataSource((prev) => [
+            ...prev,
+            {
+              id: uuid.v4(),
+              firstName: childRes.val().firstName,
+              lastName: childRes.val().lastName,
+            },
+          ]);
+          setFilteredDataSource((prev) => [
             ...prev,
             {
               id: uuid.v4(),
@@ -27,22 +62,42 @@ export const WorkerList = ({ company }) => {
           ]);
         }
       });
-    })
+    });
   };
   useEffect(() => {
-      getUserList();
+    getUserList();
   }, [loading]);
-
 
   return (
     <View>
+      <TextInput
+        style={styles.textInputStyle}
+        onChangeText={(text) => searchFilterFunction(text)}
+        value={search}
+        underlineColorAndroid="transparent"
+        placeholder="Search..."
+      />
       <FlatList
-        data={worker}
+        data={filteredDataSource}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <WorkerInfo firstName={item.firstName} lastName={item.lastName} />
+            <TouchableOpacity onPress={()=>{alert(`${item.firstName}, ${item.lastName}`)}}>
+              <WorkerInfo firstName={item.firstName} lastName={item.lastName} />
+            </TouchableOpacity>
         )}
       />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  textInputStyle: {
+    height: 50,
+    borderWidth: 1,
+    paddingLeft: 20,
+    marginHorizontal: 25,
+    marginTop: 50,
+    borderRadius: 25,
+    borderColor: "#EEEEE",
+  },
+});
