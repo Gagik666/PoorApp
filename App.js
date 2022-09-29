@@ -9,6 +9,7 @@ import { ManagerPage } from "./src/ManagerPage";
 import { GetLocation } from "./src/MapPage";
 import { UserItem } from "./components/Items/UserItem";
 import { SplashScreen } from "./src/SplashScreen";
+import WorkerStatistic from "./src/WorkerStatistic";
 
 const Stack = createStackNavigator();
 
@@ -27,64 +28,65 @@ function App() {
   }, []);
 
   // if (initializing) return null;
+  return (
+    <Stack.Navigator initialRouteName="WorkerStatistic">
+      <Stack.Screen
+        name="login"
+        component={Login}
+        options={{
+          header: (props) => null,
+        }}
+      />
+      <Stack.Screen
+        name="SplashScreen"
+        component={SplashScreen}
+        options={{
+          header: (props) => null,
+        }}
+      />
+      <Stack.Screen
+        name="Registration"
+        component={Registration}
+        options={{
+          header: (props) => null,
+        }}
+      />
+      <Stack.Screen
+        name="WorkerPage"
+        component={WorkerPage}
+        options={{
+          header: (props) => null,
+        }}
+      />
+      <Stack.Screen
+        name="ManagerPage"
+        component={ManagerPage}
+        options={{
+          header: (props) => null,
+        }}
+      />
+      <Stack.Screen
+        name="MapPage"
+        component={GetLocation}
+        options={{
+          header: (props) => null,
+        }}
+      />
+      <Stack.Screen
+        name="UserItem"
+        component={UserItem}
+        options={{ header: (props) => null }}
+      />
 
-    return (
-      <Stack.Navigator initialRouteName="SplashScreen">
-        <Stack.Screen
-          name="login"
-          component={Login}
-          options={{
-            header: (props) => null,
-          }}
-        />
-        <Stack.Screen
-          name="SplashScreen"
-          component={SplashScreen}
-          options={{
-            header: (props) => null,
-          }}
-        />
-        <Stack.Screen
-          name="Registration"
-          component={Registration}
-          options={{
-            header: (props) => null,
-          }}
-        />
-        <Stack.Screen
-          name="WorkerPage"
-          component={WorkerPage}
-          options={{
-            header: (props) => null,
-          }}
-        />
-        <Stack.Screen
-          name="ManagerPage"
-          component={ManagerPage}
-          options={{
-            header: (props) => null,
-          }}
-        />
-        <Stack.Screen
-          name="MapPage"
-          component={GetLocation}
-          options={{
-            header: (props) => null,
-          }}
-        />
-        <Stack.Screen
-          name="UserItem"
-          component={UserItem}
-          options={
-            {
-              header: (props) => null
-            }
-          }
-        />
-      </Stack.Navigator>
-    );
-  }
- 
+      <Stack.Screen
+        name="WorkerStatistic"
+        component={WorkerStatistic}
+        options={{header: (props) => null,}}
+      />
+    </Stack.Navigator>
+  );
+}
+
 export default () => {
   return (
     <NavigationContainer>

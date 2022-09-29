@@ -5,7 +5,6 @@ import {
   TextInput,
   View,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 import uuid from "react-native-uuid";
@@ -79,7 +78,7 @@ export const WorkerList = ({ company }) => {
       />
       <FlatList
         data={filteredDataSource}
-        keyExtractor={(item) => item.id}
+        // keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
             <TouchableOpacity onPress={()=>{alert(`${item.firstName}, ${item.lastName}`)}}>
               <WorkerInfo firstName={item.firstName} lastName={item.lastName} />
