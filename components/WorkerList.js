@@ -5,18 +5,15 @@ import {
   TextInput,
   View,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 import uuid from "react-native-uuid";
 import { WorkerInfo } from "./WorkerInfo";
-
 export const WorkerList = ({ company }) => {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
-
   const searchFilterFunction = (text) => {
     if (text) {
       const newData = masterDataSource.filter(function (item) {
@@ -33,7 +30,6 @@ export const WorkerList = ({ company }) => {
       setSearch(text);
     }
   };
-
   const getUserList = () => {
     const db = getDatabase();
     const dbRef = ref(db, "/users/");
@@ -50,16 +46,20 @@ export const WorkerList = ({ company }) => {
               id: uuid.v4(),
               firstName: childRes.val().firstName,
               lastName: childRes.val().lastName,
+              status: childRes.val().status,
             },
           ]);
-          setFilteredDataSource((prev) => [
-            ...prev,
-            {
-              id: uuid.v4(),
-              firstName: childRes.val().firstName,
-              lastName: childRes.val().lastName,
-            },
-          ]);
+          setFilteredDataSource((prev) => {
+            return [
+              {
+                id: uuid.v4(),
+                firstName: childRes.val().firstName,
+                lastName: childRes.val().lastName,
+                status: childRes.val().status,
+              },
+              ...prev,
+            ];
+          });
         }
       });
     });
@@ -67,7 +67,6 @@ export const WorkerList = ({ company }) => {
   useEffect(() => {
     getUserList();
   }, [loading]);
-
   return (
     <View>
       <TextInput
@@ -81,9 +80,17 @@ export const WorkerList = ({ company }) => {
         data={filteredDataSource}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-            <TouchableOpacity onPress={()=>{alert(`${item.firstName}, ${item.lastName}`)}}>
-              <WorkerInfo firstName={item.firstName} lastName={item.lastName} />
-            </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              alert(`${item.firstName}, ${item.lastName}`);
+            }}
+          >
+            <WorkerInfo
+              firstName={item.firstName}
+              lastName={item.lastName}
+              status={item.status}
+            />
+          </TouchableOpacity>
         )}
       />
     </View>

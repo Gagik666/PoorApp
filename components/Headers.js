@@ -17,6 +17,7 @@ export const Headers = () => {
           navigation.navigate("login");
         }
       });
+
   };
 
   return (

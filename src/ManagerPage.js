@@ -6,7 +6,7 @@ import { WorkerList } from "../components/WorkerList";
 import { firebase } from "../config";
 import { getDatabase, ref, update, onValue } from "firebase/database";
 import { SaveLocation } from "../components/SaveLocation";
-// import * as Location from "expo-location";
+import * as Location from "expo-location";
 
 export const ManagerPage = () => {
   const [company, setCompany] = useState("");
@@ -41,8 +41,8 @@ export const ManagerPage = () => {
     });
 
     update(ref(db, "company/" + company), {
-      latitude: ("" + lat).slice(0, 7),
-      longitude: ("" + long).slice(0, 7),
+      latitude: lat,
+      longitude: long,
     }).catch((err) => {
       alert(err);
     });
@@ -55,8 +55,8 @@ export const ManagerPage = () => {
       const {
         coords: { latitude, longitude },
       } = await Location.getCurrentPositionAsync();
-      setLat(("" + latitude).slice(0, 7));
-      setLong(("" + longitude).slice(0, 7));
+      setLat(latitude);
+      setLong(longitude);
     } catch (error) {
       Alert.alert("error", "eror location");
     }

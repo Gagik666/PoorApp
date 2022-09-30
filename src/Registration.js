@@ -47,7 +47,9 @@ export const Registration = () => {
       companyName: companyName,
       user: user,
       stat: 0,
-      saveLocation: "flex"
+      saveLocation: "flex",
+      status: "",
+      disabled: false
     }).then(() => {
       navigation.navigate(userPage)
     });
@@ -57,6 +59,7 @@ export const Registration = () => {
         companyName: companyName,
         latitude: 0,
         longitude: 0,
+        day: 0
       });
     }
   };
