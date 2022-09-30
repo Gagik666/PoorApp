@@ -4,8 +4,8 @@ import { firebase } from "../config";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 
 const UserInfo = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [firstName, setFirstName] = useState("firstname");
+  const [lastName, setLastName] = useState("lastname");
 
   const getUserInfo = () => {
     const db = getDatabase();

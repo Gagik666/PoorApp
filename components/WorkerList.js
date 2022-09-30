@@ -78,7 +78,7 @@ export const WorkerList = ({ company }) => {
       />
       <FlatList
         data={filteredDataSource}
-        keyExtractor={(item) => item.id}
+        // keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => {
