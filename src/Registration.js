@@ -20,7 +20,7 @@ export const Registration = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [inpVisible, setinpVisible] = useState("none");
-  const [companyName, setCompanyName] = useState("");
+  const [companyName, setCompanyName] = useState("t9");
   const [company, setCompany] = useState([""]);
   const [user, setUser] = useState("");
   const [userPage, setUserPage] = useState("");
@@ -32,12 +32,12 @@ export const Registration = () => {
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
-          create(firstName, lastName, companyName, user)
+          create(firstName, lastName, companyName, user);
         });
     } catch (error) {
       alert(error);
     }
-  };    
+  };
 
   const create = (firstName, lastName, companyName, user) => {
     const db = getDatabase();
@@ -49,9 +49,12 @@ export const Registration = () => {
       stat: 0,
       saveLocation: "flex",
       status: "",
-      disabled: false
+      disabled: false,
+      uid: firebase.auth().currentUser.uid,
+      day: 0,
+      countDay: 0
     }).then(() => {
-      navigation.navigate(userPage)
+      navigation.navigate(userPage);
     });
 
     if (inpVisible == "flex") {
@@ -59,7 +62,6 @@ export const Registration = () => {
         companyName: companyName,
         latitude: 0,
         longitude: 0,
-        day: 0
       });
     }
   };
@@ -103,25 +105,25 @@ export const Registration = () => {
 
   return (
     <View style={styles.container}>
-      <View style={{ marginTop: 40 }}>
+      <Text style={{ fontWeight: "bold", fontSize: 26 }}>Registration</Text>
+      <View style={{width: "80%", alignItems: "center"}}>
         <TextInput
           style={styles.textInput}
           placeholder="FirstName"
           onChangeText={(firsName) => setFirstName(firsName)}
-          autoCapitalize="none"
           autoCorrect={false}
         />
         <TextInput
           style={styles.textInput}
           placeholder="LastName"
           onChangeText={(lastName) => setLastName(lastName)}
-          autoCapitalize="none"
           autoCorrect={false}
         />
         <TextInput
           style={styles.textInput}
           placeholder="Email"
           onChangeText={(email) => setEmail(email)}
+          keyboardType = "email-address"
           autoCapitalize="none"
           autoCorrect={false}
         />
@@ -129,12 +131,12 @@ export const Registration = () => {
           style={styles.textInput}
           placeholder="Password"
           onChangeText={(Password) => setPassword(Password)}
-          autoCapitalize="name"
+          autoCapitalize="none"
           secureTextEntry={true}
         />
         <TextInput
           style={[styles.textInput, { display: inpVisible }]}
-          placeholder="Company name"
+          placeholder=" Company name"
           onChangeText={(text) => setCompanyName(text)}
           autoCapitalize="none"
           autoCorrect={false}
@@ -151,14 +153,14 @@ export const Registration = () => {
         onPress={() => registerUser(email, password)}
         style={styles.button}
       >
-        <Text style={{ fontWeight: "bool", fontSize: 22 }}>Registration</Text>
+        <Text style={{ fontWeight: "bool", fontSize: 22 }}>REGISTRATION</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => navigation.navigate("login")}
         style={{ marginTop: 20 }}
       >
         <Text style={{ fontWeight: "bool", fontSize: 16 }}>
-          Dont't have an account? Register Now
+          I already have an account. Log In now
         </Text>
       </TouchableOpacity>
     </View>
@@ -172,13 +174,13 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   textInput: {
-    padding: 5,
-    width: 4000,
-    fontSize: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#000",
-    marginBottom: 10,
-    textAlign: "center",
+    width:"100%",
+    height: 50,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+    marginHorizontal:20,
+    borderRadius:8,
   },
   button: {
     marginTop: 50,

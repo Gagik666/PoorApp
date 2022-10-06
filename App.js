@@ -29,7 +29,7 @@ function App() {
 
   // if (initializing) return null;
   return (
-    <Stack.Navigator initialRouteName="WorkerStatistic">
+    <Stack.Navigator initialRouteName="SplashScreen">
       <Stack.Screen
         name="login"
         component={Login}
@@ -81,7 +81,7 @@ function App() {
       <Stack.Screen
         name="WorkerStatistic"
         component={WorkerStatistic}
-        options={{header: (props) => null,}}
+        options={{header: (props) => null}}
       />
     </Stack.Navigator>
   );

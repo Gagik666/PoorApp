@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import {
   FlatList,
   StyleSheet,
@@ -6,14 +7,16 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import { getDatabase, ref, set, onValue } from "firebase/database";
+import { getDatabase, ref, set, onValue, child } from "firebase/database";
 import uuid from "react-native-uuid";
 import { WorkerInfo } from "./WorkerInfo";
 export const WorkerList = ({ company }) => {
+  const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
+  
   const searchFilterFunction = (text) => {
     if (text) {
       const newData = masterDataSource.filter(function (item) {
@@ -47,6 +50,7 @@ export const WorkerList = ({ company }) => {
               firstName: childRes.val().firstName,
               lastName: childRes.val().lastName,
               status: childRes.val().status,
+              uid: childRes.val().uid
             },
           ]);
           setFilteredDataSource((prev) => {
@@ -56,6 +60,7 @@ export const WorkerList = ({ company }) => {
                 firstName: childRes.val().firstName,
                 lastName: childRes.val().lastName,
                 status: childRes.val().status,
+                uid: childRes.val().uid
               },
               ...prev,
             ];
@@ -67,6 +72,12 @@ export const WorkerList = ({ company }) => {
   useEffect(() => {
     getUserList();
   }, [loading]);
+
+  const openWorkerStatistic = (uid) => {
+    navigation.navigate("WorkerStatistic", {
+      uid: uid
+    })
+  };
   return (
     <View>
       <TextInput
@@ -78,13 +89,9 @@ export const WorkerList = ({ company }) => {
       />
       <FlatList
         data={filteredDataSource}
-        // keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => {
-              alert(`${item.firstName}, ${item.lastName}`);
-            }}
-          >
+          <TouchableOpacity onPress={() => openWorkerStatistic(item.uid)}>
             <WorkerInfo
               firstName={item.firstName}
               lastName={item.lastName}

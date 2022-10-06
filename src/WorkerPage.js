@@ -17,48 +17,44 @@ export const WorkerPage = () => {
   const [long, setLong] = useState(4);
   const [color, setColor] = useState("gray");
   const [loadingVisible, setLoadingVisible] = useState("none");
-  const [status, setStatus] = useState("");
-
   const [buttonInfo, setButtonInfo] = useState(false);
-  const [day, setDay] = useState(0);
+  const [day, setDay] = useState(0.1);
+  const [countDay, setCountDay] = useState(0);
   let d = new Date();
+
   useEffect(() => {
     if (firebase.auth().currentUser !== null) {
       getCompanyInfo();
       getDayInfo();
-      updateDayInfo()
+      getLocation();
     }
   });
 
-  const updateStatusDay = async () => {
-    try {
-      await AsyncStorage.getItem("day").then((value) => {
-        const db = getDatabase();
-        update(ref(db, "users/" + firebase.auth().currentUser.uid), {
-          status: value,
-        }).catch((err) => {
-          alert(err);
-        });
-      });
-    } catch (eror) {
-      console.log(eror);
-    }
-  };
-
-   
-
   useEffect(() => {
-    getLocation();
     getCompanyLatLong();
   }, [company]);
 
-  // useEffect(() => {
-  //   if (d.getMinutes() == day) {
-  //     setButtonInfo(true);
-  //   } else {
-  //     setButtonInfo(false)
-  //   }
-  // });
+  useEffect(() => {
+    if (day > 0.1) {
+      updateDayInfo();
+    }
+  });
+
+  useEffect(() => {
+    if (countDay > 0.1) {
+      updateCountDay()
+    }
+    
+  })
+  
+
+  const updateCountDay = () => {
+    const db = getDatabase();
+    update(ref(db, "users/" + firebase.auth().currentUser.uid), {
+      countDay: countDay,
+      
+    });
+  }
 
   const setDayInfo = async (txt) => {
     try {
@@ -69,11 +65,20 @@ export const WorkerPage = () => {
   };
 
   const getDayInfo = async () => {
+    const db = getDatabase();
     try {
       await AsyncStorage.getItem("day").then((value) => {
         if (value == "is present") {
           setColor("green");
+          
+          setButtonInfo(true);
+          update(ref(db, "users/" + firebase.auth().currentUser.uid), {
+            status: value,
+          });
         } else if (value == "is absent") {
+          update(ref(db, "users/" + firebase.auth().currentUser.uid), {
+            status: value,
+          });
           setColor("red");
         } else {
           setColor("gray");
@@ -82,34 +87,24 @@ export const WorkerPage = () => {
     } catch (eror) {
       console.log(eror);
     }
-  }; 
-
-
+  };
 
   const updateDayInfo = () => {
-    if (d.getDate() == day) {
-      setButtonInfo(true);
-      setDayInfo("is present")
-    } else {
-      setDayInfo("is absent")
-      setButtonInfo(false)
+    if (d.getDate() !== day) {
+
+      
+      setDayInfo("is absent");
+      setButtonInfo(false);
     }
-  }
+  };
 
   const getCompanyInfo = async () => {
     const db = getDatabase();
     onValue(ref(db, "/users/" + firebase.auth().currentUser.uid), (r) => {
       setCompany(r.val().companyName);
-      // setStatusInfo(r.val().status);
+      setDay(r.val().day);
+      setCountDay(r.val().countDay)
     });
-
-    // if (statusInfo == "is present") {
-    //   setColor("green");
-    // } else if (statusInfo == "is absent") {
-    //   setColor("red");
-    // } else {
-    //   setColor("gray");
-    // }
   };
 
   const getCompanyLatLong = async () => {
@@ -117,7 +112,6 @@ export const WorkerPage = () => {
     onValue(ref(db, "/company/" + company), (r) => {
       setCompanyLat(r.val().latitude);
       setCompanyLong(r.val().longitude);
-      setDay(r.val().day);
     });
   };
 
@@ -134,17 +128,6 @@ export const WorkerPage = () => {
     }
   };
 
-  const updateStatus = () => {
-    updateStatusDay()
-    if (chacke() <= 20) {
-      setDayInfo("is present");
-      setLoadingVisible("none");
-    } else {
-      setLoadingVisible("none");
-      setDayInfo("is absent");
-    }
-  };
-
   const chacke = () => {
     const R = 6371e3; // metres
     const φ1 = (companyLat * Math.PI) / 180; // φ, λ in radians
@@ -156,28 +139,43 @@ export const WorkerPage = () => {
       Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
       Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // in metres
+    return R * c;
+  };
+
+  const updateStatus = () => {
+    if (chacke() <= 20) {
+      setCountDay(countDay + 1);
+      setDayInfo("is present");
+      setLoadingVisible("none");
+    } else {
+      setLoadingVisible("none");
+      setDayInfo("is absent");
+    }
   };
 
   const updateDay = () => {
     const db = getDatabase();
-    update(ref(db, "company/" + company), {
-      day: d.getDate(),
-    }).catch((err) => {
-      alert(err);
-    });
+    if (day !== d.getDate() && chacke() <= 20) {
+      
+      update(ref(db, "users/" + firebase.auth().currentUser.uid), {
+        day: d.getDate(),
+      }).catch((err) => {
+        alert(err);
+      });
+    }
   };
 
   const change = () => {
-    if (day !== d.getDate()) {
-      updateDay();
-    }
+    updateDay();
+    
     getDayInfo();
     setLoadingVisible("flex");
     getLocation();
     getCompanyLatLong();
     setTimeout(() => {
       updateStatus();
+      console.log(chacke());
+      console.log(countDay);
     }, 5000);
   };
 
@@ -187,7 +185,7 @@ export const WorkerPage = () => {
       <Headers />
       <UserInfo />
       <View>
-        <Statistic />
+        <Statistic countDay = {countDay}/>
       </View>
       <View
         style={{
@@ -205,7 +203,7 @@ export const WorkerPage = () => {
             Click me
           </Text>
         </TouchableOpacity>
-        <Text>{chacke()}</Text>
+        {/* <Text>{chacke()}</Text> */}
         <Text>{companyLong}</Text>
         <Text>{lat}</Text>
         <Text>{long}</Text>

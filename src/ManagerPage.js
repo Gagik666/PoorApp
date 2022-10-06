@@ -13,14 +13,12 @@ export const ManagerPage = () => {
   const [locationVisible, setLocationVisible] = useState("flex");
   const [lat, setLat] = useState(1);
   const [long, setLong] = useState(2);
-    
+
   useEffect(() => {
-    getLocation()
+    getLocation();
     getManagerInfo();
     console.log("update");
-  });
-
-  
+  }, []);
 
   const getManagerInfo = () => {
     const db = getDatabase();
@@ -30,11 +28,7 @@ export const ManagerPage = () => {
     });
   };
 
-
-  console.log(company);
-
   const saveLocation = () => {
-    console.log("click");
     const db = getDatabase();
     update(ref(db, "users/" + firebase.auth().currentUser.uid), {
       saveLocation: "none",
@@ -49,7 +43,6 @@ export const ManagerPage = () => {
   };
 
   const getLocation = async () => {
-    console.log("location");
     try {
       await Location.requestForegroundPermissionsAsync();
       const {
@@ -61,12 +54,11 @@ export const ManagerPage = () => {
       Alert.alert("error", "eror location");
     }
   };
-  console.log(lat);
 
   return (
     <View>
       <Headers />
-      <SaveLocation visible={locationVisible} click = {saveLocation}/>
+      <SaveLocation visible={locationVisible} click={saveLocation} />
       <UserInfo />
       <WorkerList company={company} />
     </View>

@@ -52,7 +52,7 @@ export const ModalWindow = ({
 
         <FlatList
           keyExtractor={(item) => item.id}
-          data={filteredDataSource}
+          data={cmpanyName}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.touch}
