@@ -14,21 +14,22 @@ export const Headers = () => {
       await AsyncStorage.setItem("day", "");
       await AsyncStorage.setItem("curentUser", "false");
       await AsyncStorage.setItem("email", " ");
-      await AsyncStorage.setItem("password", "false");
+      await AsyncStorage.setItem("password", " ");
     } catch (eror) {
       console.log(eror);
     }
   }
 
   const logAuth = () => {
-    clear()
+    
     console.log(firebase.auth().currentUser);
     firebase
       .auth()
       .signOut()
       .then(() => {
+        clear()
         if (firebase.auth().currentUser === null) {
-          navigation.navigate("Registration");
+          navigation.navigate("login");
         }
       });
 

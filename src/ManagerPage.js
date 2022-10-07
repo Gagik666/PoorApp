@@ -17,7 +17,6 @@ export const ManagerPage = () => {
   useEffect(() => {
     getLocation();
     getManagerInfo();
-    console.log("update");
   }, []);
 
   const getManagerInfo = () => {

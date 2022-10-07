@@ -17,6 +17,7 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loadingVisible, setLoadingVisible] = useState("none");
+  const [messageVisible, setMessageVisible] = useState("none");
 
   loginUser = async (email, password) => {
     setCurentUserInfo("true", email, password);
@@ -39,9 +40,10 @@ export const Login = () => {
       setLoadingVisible("none");
       onValue(ref(db, "/users/" + firebase.auth().currentUser.uid), (r) => {
         navigation.navigate(`${r.val().user}Page`);
+        setMessageVisible("none");
       });
     } catch {
-      alert("invalid email or password");
+      setMessageVisible("flex");
       setLoadingVisible("none");
     }
   };
@@ -78,6 +80,9 @@ export const Login = () => {
         autoCapitalize="none"
         secureTextEntry={true}
       />
+      <Text style={[styles.txtMessage, { display: messageVisible }]}>
+        invalid email or password
+      </Text>
       <TouchableOpacity
         onPress={() => loginUser(email, password)}
         style={styles.button}
@@ -119,5 +124,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 50,
+  },
+  txtMessage: {
+    color: "red",
   },
 });

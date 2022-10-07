@@ -5,12 +5,16 @@ import { Headers } from "../components/Headers";
 import UserInfo from "../components/UserInfo";
 import { Statistic } from "../components/Statistick";
 import * as Location from "expo-location";
-import { getDatabase, ref, onValue, update } from "firebase/database";
+import { getDatabase, ref, set, onValue, update } from "firebase/database";
 import { Loading } from "../components/Loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const WorkerPage = () => {
   const [company, setCompany] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [rating, setRating] = useState("");
   const [companyLat, setCompanyLat] = useState(1);
   const [lat, setLat] = useState(2);
   const [companyLong, setCompanyLong] = useState(3);
@@ -42,19 +46,16 @@ export const WorkerPage = () => {
 
   useEffect(() => {
     if (countDay > 0.1) {
-      updateCountDay()
+      updateCountDay();
     }
-    
-  })
-  
+  });
 
   const updateCountDay = () => {
     const db = getDatabase();
     update(ref(db, "users/" + firebase.auth().currentUser.uid), {
       countDay: countDay,
-      
     });
-  }
+  };
 
   const setDayInfo = async (txt) => {
     try {
@@ -70,7 +71,6 @@ export const WorkerPage = () => {
       await AsyncStorage.getItem("day").then((value) => {
         if (value == "is present") {
           setColor("green");
-          
           setButtonInfo(true);
           update(ref(db, "users/" + firebase.auth().currentUser.uid), {
             status: value,
@@ -91,8 +91,6 @@ export const WorkerPage = () => {
 
   const updateDayInfo = () => {
     if (d.getDate() !== day) {
-
-      
       setDayInfo("is absent");
       setButtonInfo(false);
     }
@@ -103,7 +101,11 @@ export const WorkerPage = () => {
     onValue(ref(db, "/users/" + firebase.auth().currentUser.uid), (r) => {
       setCompany(r.val().companyName);
       setDay(r.val().day);
-      setCountDay(r.val().countDay)
+      setCountDay(r.val().countDay);
+      setFirstName(r.val().firstName);
+      setLastName(r.val().lastName);
+      setEmail(r.val().email);
+      setRating(r.val().rating);
     });
   };
 
@@ -128,6 +130,17 @@ export const WorkerPage = () => {
     }
   };
 
+  const creatUserInfo = () => {
+    const db = getDatabase();
+    set(ref(db, "usersInfo/" + `${firebase.auth().currentUser.uid}/` + `${d.getMinutes()}`), {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      rating: rating,
+      fulDay: `${d.getHours()}:${d.getDate()}  ${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`
+    });
+  };
+
   const chacke = () => {
     const R = 6371e3; // metres
     const φ1 = (companyLat * Math.PI) / 180; // φ, λ in radians
@@ -145,6 +158,7 @@ export const WorkerPage = () => {
   const updateStatus = () => {
     if (chacke() <= 20) {
       setCountDay(countDay + 1);
+      creatUserInfo();
       setDayInfo("is present");
       setLoadingVisible("none");
     } else {
@@ -156,7 +170,6 @@ export const WorkerPage = () => {
   const updateDay = () => {
     const db = getDatabase();
     if (day !== d.getDate() && chacke() <= 20) {
-      
       update(ref(db, "users/" + firebase.auth().currentUser.uid), {
         day: d.getDate(),
       }).catch((err) => {
@@ -167,7 +180,7 @@ export const WorkerPage = () => {
 
   const change = () => {
     updateDay();
-    
+
     getDayInfo();
     setLoadingVisible("flex");
     getLocation();
@@ -185,7 +198,7 @@ export const WorkerPage = () => {
       <Headers />
       <UserInfo />
       <View>
-        <Statistic countDay = {countDay}/>
+        <Statistic countDay={countDay} />
       </View>
       <View
         style={{
@@ -203,10 +216,6 @@ export const WorkerPage = () => {
             Click me
           </Text>
         </TouchableOpacity>
-        {/* <Text>{chacke()}</Text> */}
-        <Text>{companyLong}</Text>
-        <Text>{lat}</Text>
-        <Text>{long}</Text>
       </View>
     </View>
   );

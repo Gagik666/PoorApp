@@ -1,51 +1,48 @@
 import CircularProgress from "react-native-circular-progress-indicator";
-import { Dimensions} from "react-native";
+import { Dimensions, Text } from "react-native";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import * as Progress from 'react-native-progress';
+import * as Progress from "react-native-progress";
 
-export const Statistic = ({countDay}) => {
+export const Statistic = ({ countDay, rating }) => {
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
-  const d = new Date()
-  console.log(d.getMonth());
-  const month = [31, 28, 30, 31, 31, 30 , 31, 31, 30, 31, 30, 31]
+  const d = new Date();
 
-console.log(`countDay ${countDay}`);
+  const month = [31, 28, 30, 31, 31, 30, 31, 31, 30, 31, 30, 31];
   return (
-    <View style={{ flexDirection: "row" }}>
+    <View style={styles.container}>
       <CircularProgress
         value={countDay}
         maxValue={month[d.getMonth()]}
-        radius={windowWidth/5}
+        radius={windowWidth / 5}
         textColor={"#fff"}
         activeStrokeColor={"green"}
         inActiveStrokeColor={"red"}
         inActiveStrokeOpacity={1}
         inActiveStrokeWidth={15}
         activeStrokeWidth={15}
-        title={`${Math.round(countDay * 100 / month[d.getMonth()])}%`}
+        title={`${Math.round((countDay * 100) / month[d.getMonth()])}%`}
         titleColor={"green"}
-        titleStyle={{ fontSize: 22}}
+        titleStyle={{ fontSize: 22 }}
       />
-      <View style={{ justifyContent: "space-between" }}>
         
-        <View style={styles.ststStyles}>
-          <View style={styles.greenStyle}/>
-          <Progress.Bar progress={0.7} width={200} color={'green'}/>
-        </View>
-
-        <View style={styles.ststStyles}>
-          <View style={styles.redStyle} />
-          <Progress.Bar progress={0.3} width={200} color={'red'}/>
-        </View>
-        
-      </View>
+          <Text style = {styles.txtRating}>{rating}</Text>
+       
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row", 
+    justifyContent: "space-around", 
+    alignItems: "center"
+  },
+  txtRating: {
+    fontSize: 22,
+    fontWeight: "bold"
+  },
   redStyle: {
     height: 15,
     width: 15,
@@ -58,9 +55,8 @@ const styles = StyleSheet.create({
     backgroundColor: "green",
     borderRadius: 100,
   },
-  ststStyles:{
-    height:35,
-    justifyContent:'space-between'
+  ststStyles: {
+    height: 35,
+    justifyContent: "space-between",
   },
-
 });

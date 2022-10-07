@@ -12,6 +12,7 @@ import { getDatabase, ref, set, onValue } from "firebase/database";
 import { SelectUser } from "../components/SelectUser";
 import { ModalWindow } from "../components/ModalWindow";
 import uuid from "react-native-uuid";
+import { Loading } from "../components/Loading";
 
 export const Registration = () => {
   const navigation = useNavigation();
@@ -25,36 +26,44 @@ export const Registration = () => {
   const [user, setUser] = useState("");
   const [userPage, setUserPage] = useState("");
   const [modalWindow, setModalWindow] = useState(false);
+  const [loadingVisible, setLoadingVisible] = useState("none");
+  const [messageVisible, setMessageVisible] = useState("none");
 
   const registerUser = async (email, password) => {
+    setLoadingVisible("flex");
     try {
       await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
-          create(firstName, lastName, companyName, user);
+          create(firstName, lastName, companyName, user, email);
         });
     } catch (error) {
-      alert(error);
+      setMessageVisible("flex");
+      setLoadingVisible("none");
     }
   };
 
-  const create = (firstName, lastName, companyName, user) => {
+  const create = (firstName, lastName, companyName, user, email) => {
     const db = getDatabase();
     set(ref(db, "users/" + firebase.auth().currentUser.uid), {
       firstName: firstName,
       lastName: lastName,
       companyName: companyName,
+      email: email,
       user: user,
-      stat: 0,
       saveLocation: "flex",
       status: "",
       disabled: false,
       uid: firebase.auth().currentUser.uid,
       day: 0,
-      countDay: 0
+      dayRating: 0,
+      countDay: 0,
+      rating: 0,
     }).then(() => {
       navigation.navigate(userPage);
+      setLoadingVisible("none");
+      setMessageVisible("none");
     });
 
     if (inpVisible == "flex") {
@@ -65,6 +74,8 @@ export const Registration = () => {
       });
     }
   };
+
+  
 
   const selectManager = () => {
     if (inpVisible == "none") {
@@ -79,6 +90,7 @@ export const Registration = () => {
   const selectWorker = () => {
     if (modalWindow == false) {
       setModalWindow(true);
+      setinpVisible("none");
       setUser("Worker");
       setUserPage("WorkerPage");
     } else {
@@ -105,8 +117,9 @@ export const Registration = () => {
 
   return (
     <View style={styles.container}>
+      <Loading loading={loadingVisible} />
       <Text style={{ fontWeight: "bold", fontSize: 26 }}>Registration</Text>
-      <View style={{width: "80%", alignItems: "center"}}>
+      <View style={{ width: "80%", alignItems: "center" }}>
         <TextInput
           style={styles.textInput}
           placeholder="FirstName"
@@ -123,7 +136,7 @@ export const Registration = () => {
           style={styles.textInput}
           placeholder="Email"
           onChangeText={(email) => setEmail(email)}
-          keyboardType = "email-address"
+          keyboardType="email-address"
           autoCapitalize="none"
           autoCorrect={false}
         />
@@ -149,6 +162,9 @@ export const Registration = () => {
         cmpanyName={company}
         selectCompany={selectCompany}
       />
+      <Text style={[styles.txtMessage, { display: messageVisible }]}>
+        invalid email or password
+      </Text>
       <TouchableOpacity
         onPress={() => registerUser(email, password)}
         style={styles.button}
@@ -174,21 +190,25 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   textInput: {
-    width:"100%",
+    width: "100%",
     height: 50,
     margin: 12,
     borderWidth: 1,
     padding: 10,
-    marginHorizontal:20,
-    borderRadius:8,
+    marginHorizontal: 20,
+    borderRadius: 8,
   },
   button: {
-    marginTop: 50,
+    marginTop: 30,
     height: 70,
     width: 250,
     backgroundColor: "#026efd",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 50,
+  },
+  txtMessage: {
+    color: "red",
+    marginTop: 16,
   },
 });
