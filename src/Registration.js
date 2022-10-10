@@ -16,8 +16,8 @@ import { Loading } from "../components/Loading";
 
 export const Registration = () => {
   const navigation = useNavigation();
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [inpVisible, setinpVisible] = useState("none");
@@ -57,9 +57,9 @@ export const Registration = () => {
       disabled: false,
       uid: firebase.auth().currentUser.uid,
       day: 0,
-      dayRating: 0,
+      dayRating: 1,
       countDay: 0,
-      rating: 0,
+      rating: 1,
     }).then(() => {
       navigation.navigate(userPage);
       setLoadingVisible("none");

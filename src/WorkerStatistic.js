@@ -16,7 +16,7 @@ const WorkerStatistic = () => {
   const [lastName, setLastName] = useState("lastname");
   const [status, setstatus] = useState("status");
   const [countDay, setCountDay] = useState(0);
-  const [fixRating, setFixRating] = useState(0);
+  const [fixRating, setFixRating] = useState(1);
   const [rating, setRating] = useState(0);
   const [day, setDay] = useState(0.1);
   const [dayRating, setDayRating] = useState(0.1);
@@ -26,10 +26,6 @@ const WorkerStatistic = () => {
   useEffect(() => {
     getWorkerInfo();
   }, []);
-  // useEffect(() => {
-    
-  //   console.log("stacvec");
-  // }, [fixRating]);
 
   useEffect(() => {
     if (rating > 0) {
@@ -39,13 +35,12 @@ const WorkerStatistic = () => {
 
   useEffect(() => {
     if (d.getDate() !== dayRating) {
-      setVisableView("flex")
+      setVisableView("flex");
     } else {
-      setVisableView("none")
+      setVisableView("none");
     }
-  },[dayRating]);
-   
-   
+  }, [dayRating]);
+
   const getWorkerInfo = () => {
     const db = getDatabase();
     onValue(ref(db, "/users/" + route.params.uid), (r) => {
@@ -54,7 +49,7 @@ const WorkerStatistic = () => {
       setstatus(r.val().status);
       setCountDay(r.val().countDay);
       setDayRating(r.val().dayRating);
-      setFixRating(r.val().rating)
+      setFixRating(r.val().rating);
     });
   };
 
@@ -62,38 +57,51 @@ const WorkerStatistic = () => {
     const db = getDatabase();
     if (fixRating > 0.1) {
       update(ref(db, "users/" + route.params.uid), {
-        dayRating: d.getDate()
+        dayRating: d.getDate(),
       });
     }
-    
   };
 
-
   const updateRating = () => {
-    console.log(rating);
     const db = getDatabase();
     if (fixRating > 0.1) {
       update(ref(db, "users/" + route.params.uid), {
         rating: fixRating + Math.floor(rating),
       });
     }
-
   };
 
   const saveRating = () => {
     setVisibleItem("none");
     updateRating();
-    setVisableView("none")
-    updateDayRating()
+    saveRatingDay()
+    setVisableView("none");
+    updateDayRating();
   };
+
+  const ShowAllInfo = () => {
+    navigation.navigate("WorkerStatisticInfo", {
+       uid: route.params.uid
+    })
+  }
+
+  const saveRatingDay = () => {
+    const db = getDatabase();
+    update(ref(db, "/usersInfo/" + `${route.params.uid }/`+ d.getMinutes()), {
+      rating: 99,
+    });
+  }
 
   return (
     <View style={styles.container}>
       <Headers />
       <WorkerInfo firstName={firstName} lastName={lastName} status={status} />
       <View style={{ marginTop: 50 }}>
-        <Statistic countDay={countDay} rating = {fixRating}/>
+        <Statistic countDay={countDay} rating={fixRating} />
       </View>
+      <TouchableOpacity onPress={() => ShowAllInfo()}>
+        <Text>Show all info</Text>
+      </TouchableOpacity>
       <View
         style={{
           height: "50%",
@@ -104,7 +112,7 @@ const WorkerStatistic = () => {
         <View style={styles.ratingView}>
           <Text style={{ display: visibleItem }}>{Math.floor(rating)}</Text>
           <Slider
-            style={[styles.slider, {display: visableView}]}
+            style={[styles.slider, { display: visableView }]}
             onValueChange={(value) => setRating(value)}
             minimumValue={1}
             maximumValue={5}

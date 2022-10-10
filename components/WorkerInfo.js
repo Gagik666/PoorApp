@@ -4,21 +4,17 @@ import { firebase } from "../config";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 
 export const WorkerInfo = ({ firstName, lastName, status }) => {
-  const [color, setColor] = useState("red")
+  const [color, setColor] = useState("red");
   useEffect(() => {
-    updateStatus()
-
+    updateStatus();
   }, [status]);
-
-
-
   const updateStatus = () => {
-    if(status == 'is present') {
-        setColor("green")
+    if (status == "is present") {
+      setColor("green");
     } else {
-        setColor("red")
+      setColor("red");
     }
-  } 
+  };
 
   return (
     <View style={styles.container}>
@@ -36,7 +32,7 @@ export const WorkerInfo = ({ firstName, lastName, status }) => {
       </View>
 
       <View style={styles.infoView}>
-        <Text style = {{color: color}}>{status}</Text>
+        <Text style={{ color: color }}>{status}</Text>
       </View>
     </View>
   );

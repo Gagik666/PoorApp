@@ -136,8 +136,7 @@ export const WorkerPage = () => {
       firstName: firstName,
       lastName: lastName,
       email: email,
-      rating: rating,
-      fulDay: `${d.getHours()}:${d.getDate()}  ${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`
+      FullDate: `${d.getHours()}:${d.getMinutes()}  ${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`
     });
   };
 

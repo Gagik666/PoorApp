@@ -9,6 +9,7 @@ import { ManagerPage } from "./src/ManagerPage";
 import { GetLocation } from "./src/MapPage";
 import { UserItem } from "./components/Items/UserItem";
 import { SplashScreen } from "./src/SplashScreen";
+import { WorkerStatisticInfo } from "./src/WorkerStatisticInfo";
 import WorkerStatistic from "./src/WorkerStatistic";
 
 const Stack = createStackNavigator();
@@ -81,7 +82,15 @@ function App() {
       <Stack.Screen
         name="WorkerStatistic"
         component={WorkerStatistic}
-        options={{header: (props) => null}}
+        options={{ header: (props) => null }}
+      />
+
+      <Stack.Screen
+        name="WorkerStatisticInfo"
+        component={WorkerStatisticInfo}
+        options={{
+          header: (props) => null,
+        }}
       />
     </Stack.Navigator>
   );
