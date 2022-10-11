@@ -19,15 +19,17 @@ export const SplashScreen = ({ navigation }) => {
     try {
       await AsyncStorage.getItem("curentUser").then((value) => {
         if (value === "true") {
-            loginUser(email, password)
+          loginUser(email, password);
         } else {
-            setTimeout(function () {
-                navigation.navigate("login");
-              }, 3000);
+          setTimeout(function () {
+            navigation.navigate("login");
+          }, 3000);
         }
       });
     } catch (eror) {
       console.log(eror);
+    }finally{
+
     }
   };
 
@@ -63,8 +65,7 @@ export const SplashScreen = ({ navigation }) => {
       onValue(ref(db, "/users/" + firebase.auth().currentUser.uid), (r) => {
         navigation.navigate(`${r.val().user}Page`);
       });
-    } catch {
-    }
+    } catch {}
   };
 
   return (
@@ -85,3 +86,8 @@ const styles = StyleSheet.create({
     height: 100,
   },
 });
+
+
+
+////
+
