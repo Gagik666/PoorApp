@@ -13,6 +13,7 @@ import { SelectUser } from "../components/SelectUser";
 import { ModalWindow } from "../components/ModalWindow";
 import uuid from "react-native-uuid";
 import { Loading } from "../components/Loading";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const Registration = () => {
   const navigation = useNavigation();
@@ -30,6 +31,7 @@ export const Registration = () => {
   const [messageVisible, setMessageVisible] = useState("none");
 
   const registerUser = async (email, password) => {
+    setCurentUserInfo("true", email, password);
     setLoadingVisible("flex");
     try {
       await firebase
@@ -45,6 +47,7 @@ export const Registration = () => {
   };
 
   const create = (firstName, lastName, companyName, user, email) => {
+    let regName = /^[A-Z]{1}[A-Za-z]{1,19}$/;
     const db = getDatabase();
     set(ref(db, "users/" + firebase.auth().currentUser.uid), {
       firstName: firstName,
@@ -113,6 +116,17 @@ export const Registration = () => {
   const selectCompany = (company, user) => {
     setCompanyName(company);
     setUser(user);
+  };
+
+
+  const setCurentUserInfo = async (curentUser, email, password) => {
+    try {
+      await AsyncStorage.setItem("curentUser", curentUser);
+      await AsyncStorage.setItem("email", email);
+      await AsyncStorage.setItem("password", password);
+    } catch (eror) {
+      console.log(eror);
+    }
   };
 
   return (

@@ -27,9 +27,12 @@ export const Headers = () => {
       .auth()
       .signOut()
       .then(() => {
-        clear()
+        
         if (firebase.auth().currentUser === null) {
-          navigation.navigate("login");
+          setTimeout(() => {
+            navigation.navigate("login");
+          }, 1000);
+          clear()
         }
       });
 

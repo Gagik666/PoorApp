@@ -8,7 +8,7 @@ import * as Location from "expo-location";
 import { getDatabase, ref, set, onValue, update } from "firebase/database";
 import { Loading } from "../components/Loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { AntDesign } from "@expo/vector-icons";
 export const WorkerPage = () => {
   const [company, setCompany] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -28,10 +28,13 @@ export const WorkerPage = () => {
 
   useEffect(() => {
     if (firebase.auth().currentUser !== null) {
-      getCompanyInfo();
+      setTimeout(() => {
+        getCompanyInfo();
+      }, 2000);
       getDayInfo();
       getLocation();
     }
+    autoLogin()
   });
 
   useEffect(() => {
@@ -80,8 +83,6 @@ export const WorkerPage = () => {
             status: value,
           });
           setColor("red");
-        } else {
-          setColor("gray");
         }
       });
     } catch (eror) {
@@ -132,12 +133,20 @@ export const WorkerPage = () => {
 
   const creatUserInfo = () => {
     const db = getDatabase();
-    set(ref(db, "usersInfo/" + `${firebase.auth().currentUser.uid}/` + `${d.getMinutes()}`), {
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      FullDate: `${d.getHours()}:${d.getMinutes()}  ${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`
-    });
+    set(
+      ref(
+        db,
+        "usersInfo/" +
+          `${firebase.auth().currentUser.uid}/` +
+          `${d.getMinutes()}`
+      ),
+      {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        FullDate: `${d.getHours()}:${d.getMinutes()}  ${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`,
+      }
+    );
   };
 
   const chacke = () => {
@@ -191,6 +200,17 @@ export const WorkerPage = () => {
     }, 5000);
   };
 
+  const autoLogin = async () => {
+    try {
+      await AsyncStorage.getItem("curentUser").then((value) => {
+        console.log(value);
+      });
+      
+    } catch (eror) {
+      console.log(eror);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Loading loading={loadingVisible} />
@@ -206,14 +226,8 @@ export const WorkerPage = () => {
           alignItems: "center",
         }}
       >
-        <TouchableOpacity style={{ backgroundColor: `${color}`, padding: 10 }}>
-          <Text
-            disabled={buttonInfo}
-            style={styles.btnStyle}
-            onPress={() => change()}
-          >
-            Click me
-          </Text>
+        <TouchableOpacity style={{ backgroundColor: `${color}`, borderRadius: 50 }}>
+        <AntDesign onPress= {() => change()} name="checkcircleo" size={60} color="black" />
         </TouchableOpacity>
       </View>
     </View>

@@ -11,10 +11,36 @@ import { UserItem } from "./components/Items/UserItem";
 import { SplashScreen } from "./src/SplashScreen";
 import { WorkerStatisticInfo } from "./src/WorkerStatisticInfo";
 import WorkerStatistic from "./src/WorkerStatistic";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const Stack = createStackNavigator();
 
+
+
 function App() {
+
+  
+
+  const setCurentUserInfo = async (curentUser, email, password) => {
+    try {
+      await AsyncStorage.setItem("curentUser", "false");
+    } catch (eror) {
+      console.log(eror);
+    }
+  };
+
+  const autoLogin = async () => {
+    try {
+      await AsyncStorage.getItem("curentUser").then((value) => {
+        console.log(value);
+      });
+      
+    } catch (eror) {
+      console.log(eror);
+    }
+  };
+
+  // autoLogin()
+  // setCurentUserInfo()
   const [initializing, setinitializing] = useState(true);
   const [user, setUser] = useState();
 

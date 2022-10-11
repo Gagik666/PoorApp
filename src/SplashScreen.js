@@ -12,18 +12,19 @@ export const SplashScreen = ({ navigation }) => {
   });
 
   useEffect(() => {
-    getCurentUserInfo();
+    setTimeout(() => {
+      getCurentUserInfo();
+    }, 3000);
   }, [email, password]);
 
   const getCurentUserInfo = async () => {
     try {
       await AsyncStorage.getItem("curentUser").then((value) => {
         if (value === "true") {
-            loginUser(email, password)
-        } else {
-            setTimeout(function () {
-                navigation.navigate("login");
-              }, 3000);
+          loginUser(email, password);
+        }  
+        if (value === "false") {
+          navigation.navigate("login");
         }
       });
     } catch (eror) {
@@ -63,8 +64,7 @@ export const SplashScreen = ({ navigation }) => {
       onValue(ref(db, "/users/" + firebase.auth().currentUser.uid), (r) => {
         navigation.navigate(`${r.val().user}Page`);
       });
-    } catch {
-    }
+    } catch {}
   };
 
   return (

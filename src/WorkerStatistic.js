@@ -72,9 +72,9 @@ const WorkerStatistic = () => {
   };
 
   const saveRating = () => {
+    back()
     setVisibleItem("none");
     updateRating();
-    saveRatingDay()
     setVisableView("none");
     updateDayRating();
   };
@@ -85,11 +85,8 @@ const WorkerStatistic = () => {
     })
   }
 
-  const saveRatingDay = () => {
-    const db = getDatabase();
-    update(ref(db, "/usersInfo/" + `${route.params.uid }/`+ d.getMinutes()), {
-      rating: 99,
-    });
+  const back = () => {
+    navigation.goBack(null)
   }
 
   return (

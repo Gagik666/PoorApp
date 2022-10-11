@@ -10,12 +10,11 @@ export const WorkerStatisticInfo = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [workerStatisticInfoList, setWorkerStatisticInfoList] = useState([
-    {fullDate: "FullDate", rating: "Rating"}
+    {fullDate: "Visit"},
   ]);
   useEffect(() => {
     getWorkerInfo();
     getWorkerInfoList();
-    
   }, []);
 
   const getWorkerInfo = () => {
@@ -33,15 +32,11 @@ export const WorkerStatisticInfo = () => {
       r.forEach((i) => {
         setWorkerStatisticInfoList((prev) => [
           ...prev,
-          { fullDate: i.val().FullDate, 
-            rating: i.val().rating
-        },
+          { fullDate: i.val().FullDate, rating: i.val().rating },
         ]);
       });
     });
   };
-
-  
 
   return (
     <View style={styles.container}>
@@ -50,7 +45,9 @@ export const WorkerStatisticInfo = () => {
         <Text>{lastName}</Text>
         <Text>{email}</Text>
       </View>
-      <WorkerStatisticInfoList workerStatisticInfoList = {workerStatisticInfoList}/>
+      <WorkerStatisticInfoList
+        workerStatisticInfoList={workerStatisticInfoList}
+      />
     </View>
   );
 };
@@ -64,6 +61,6 @@ const styles = StyleSheet.create({
   header: {
     width: "70%",
     flexDirection: "row",
-    justifyContent:"space-between",
+    justifyContent: "space-between",
   },
 });

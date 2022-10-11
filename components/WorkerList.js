@@ -16,7 +16,7 @@ export const WorkerList = ({ company }) => {
   const [search, setSearch] = useState("");
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
-  
+
   const searchFilterFunction = (text) => {
     if (text) {
       const newData = masterDataSource.filter(function (item) {
@@ -37,7 +37,8 @@ export const WorkerList = ({ company }) => {
     const db = getDatabase();
     const dbRef = ref(db, "/users/");
     onValue(dbRef, (res) => {
-      setLoading(true);
+      setLoading(true); 
+      setFilteredDataSource("")
       res.forEach((childRes) => {
         if (
           childRes.val().user == "Worker" &&
@@ -50,7 +51,7 @@ export const WorkerList = ({ company }) => {
               firstName: childRes.val().firstName,
               lastName: childRes.val().lastName,
               status: childRes.val().status,
-              uid: childRes.val().uid
+              uid: childRes.val().uid,
             },
           ]);
           setFilteredDataSource((prev) => {
@@ -60,7 +61,7 @@ export const WorkerList = ({ company }) => {
                 firstName: childRes.val().firstName,
                 lastName: childRes.val().lastName,
                 status: childRes.val().status,
-                uid: childRes.val().uid
+                uid: childRes.val().uid,
               },
               ...prev,
             ];
@@ -75,8 +76,8 @@ export const WorkerList = ({ company }) => {
 
   const openWorkerStatistic = (uid) => {
     navigation.navigate("WorkerStatistic", {
-      uid: uid
-    })
+      uid: uid,
+    });
   };
   return (
     <View>
@@ -87,19 +88,21 @@ export const WorkerList = ({ company }) => {
         underlineColorAndroid="transparent"
         placeholder="Search..."
       />
-      <FlatList
-        data={filteredDataSource}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => openWorkerStatistic(item.uid)}>
-            <WorkerInfo
-              firstName={item.firstName}
-              lastName={item.lastName}
-              status={item.status}
-            />
-          </TouchableOpacity>
-        )}
-      />
+      <View style = {{height: "70%"}}>
+        <FlatList
+          data={filteredDataSource}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => openWorkerStatistic(item.uid)}>
+              <WorkerInfo
+                firstName={item.firstName}
+                lastName={item.lastName}
+                status={item.status}
+              />
+            </TouchableOpacity>
+          )}
+        />
+      </View>
     </View>
   );
 };
