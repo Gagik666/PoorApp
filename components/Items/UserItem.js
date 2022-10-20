@@ -11,7 +11,6 @@ export const UserItem = () => {
             </View>
             <View style={styles.textView}>
                 <Text>First Name</Text>
-                <Text>Last Name</Text>
             </View>
         </View>
     )

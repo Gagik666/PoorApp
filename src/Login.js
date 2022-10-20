@@ -2,7 +2,6 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -11,6 +10,7 @@ import { firebase } from "../config";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 import { Loading } from "../components/Loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Input } from "../components/Input";
 
 export const Login = () => {
   const navigation = useNavigation();
@@ -19,7 +19,10 @@ export const Login = () => {
   const [loadingVisible, setLoadingVisible] = useState("none");
   const [messageVisible, setMessageVisible] = useState("none");
 
+  
+  
   loginUser = async (email, password) => {
+    intru();
     setCurentUserInfo("true", email, password);
     setLoadingVisible("flex");
     try {
@@ -34,6 +37,15 @@ export const Login = () => {
     } catch (error) {}
   };
 
+  const intru = async () => {
+    try {
+      await AsyncStorage.setItem("intru", "false");
+    } catch (eror) {
+      console.log(eror);
+    }
+  };
+
+
   const getUserInfo = () => {
     const db = getDatabase();
     try {
@@ -41,6 +53,7 @@ export const Login = () => {
       onValue(ref(db, "/users/" + firebase.auth().currentUser.uid), (r) => {
         navigation.navigate(`${r.val().user}Page`);
         setMessageVisible("none");
+        userStatus(`${r.val().user}Page`)
       });
     } catch {
       setMessageVisible("flex");
@@ -50,6 +63,7 @@ export const Login = () => {
 
   const setCurentUserInfo = async (curentUser, email, password) => {
     try {
+      await AsyncStorage.setItem("intru", "false");
       await AsyncStorage.setItem("curentUser", curentUser);
       await AsyncStorage.setItem("email", email);
       await AsyncStorage.setItem("password", password);
@@ -58,33 +72,53 @@ export const Login = () => {
     }
   };
 
+  const userStatus = async (status) => {
+    try {
+      await AsyncStorage.setItem("status", status);
+    } catch (eror) {
+      console.log(eror);
+    }
+  };
+
+  const userEmail = (text) => {
+    setEmail(text);
+  };
+
+  const userPassword = (text) => {
+    setPassword(text)
+  } 
+
+  const validate = () => {
+    if (email === "" || password === "") {
+      setMessageVisible("flex");
+    } else {
+      return loginUser(email, password)
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Loading loading={loadingVisible} />
       <Text style={{ fontWeight: "bold", fontSize: 26 }}>Login</Text>
-
-      <TextInput
-        style={styles.textInput}
-        placeholder="Email"
-        value={email}
-        keyboardType="email-address"
-        onChangeText={(email) => setEmail(email)}
-        autoCapitalize="none"
-        autoCorrect={false}
+      <View style={{ width: "80%", alignItems: "center" }}>
+      <Input
+        placeHolder={"Email"}
+        type={"email-address"}
+        secrete={false}
+        text={userEmail}
       />
-      <TextInput
-        style={styles.textInput}
-        placeholder="Password"
-        value={password}
-        onChangeText={(Password) => setPassword(Password)}
-        autoCapitalize="none"
-        secureTextEntry={true}
+      <Input
+        placeHolder={"Password"}
+        type={" "}
+        secrete={true}
+        text={userPassword}
       />
+       </View>
       <Text style={[styles.txtMessage, { display: messageVisible }]}>
         invalid email or password
       </Text>
       <TouchableOpacity
-        onPress={() => loginUser(email, password)}
+        onPress={() => validate()}
         style={styles.button}
       >
         <Text style={{ fontWeight: "bool", fontSize: 22 }}>LOG IN</Text>

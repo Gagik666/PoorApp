@@ -1,72 +1,68 @@
 import React, { useEffect, useState } from "react";
 import { Image, View, StyleSheet } from "react-native";
 import { firebase } from "../config";
-import { getDatabase, ref, set, onValue } from "firebase/database";
+import { getDatabase, ref, onValue } from "firebase/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 export const SplashScreen = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   useEffect(() => {
-    autoLogin();
+    getCurentUserInfo();
   });
-
-  useEffect(() => {
-    setTimeout(() => {
-      getCurentUserInfo();
-    }, 3000);
-  }, [email, password]);
 
   const getCurentUserInfo = async () => {
     try {
+      var email = await AsyncStorage.getItem("email");
+      var password = await AsyncStorage.getItem("password");
+      var intru = await AsyncStorage.getItem("intru");
+      var status = await AsyncStorage.getItem("status");
       await AsyncStorage.getItem("curentUser").then((value) => {
-        if (value === "true") {
-          loginUser(email, password);
-        }  
-        if (value === "false") {
-          navigation.navigate("login");
+        console.log(value);
+
+        if (intru == "false") {
+          if (value === "true") {
+            loginUser(email, password, status);
+          }
+          if (value === null || value === "false") {
+            navigation.navigate("login");
+          }
+        }
+        else if (intru === "true" || intru === null) {
+          navigation.navigate("Intru1");
         }
       });
     } catch (eror) {
       console.log(eror);
-    }finally{
-
+    } finally {
     }
   };
 
-  const autoLogin = async () => {
-    try {
-      await AsyncStorage.getItem("email").then((value) => {
-        setEmail(value);
-      });
-      await AsyncStorage.getItem("password").then((value) => {
-        setPassword(value);
-      });
-    } catch (eror) {
-      console.log(eror);
-    }
-  };
-
-  loginUser = async (email, password) => {
+  loginUser = async (email, password, status) => {
     try {
       await firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(
           setTimeout(() => {
-            getUserInfo();
-          }, 2000)
+            navigation.navigate(status);
+            // console.log(status);
+          }, 3000)
         );
     } catch (error) {}
   };
 
   const getUserInfo = () => {
-    const db = getDatabase();
-    try {
-      onValue(ref(db, "/users/" + firebase.auth().currentUser.uid), (r) => {
-        navigation.navigate(`${r.val().user}Page`);
-      });
-    } catch {}
+   
+    // const db = getDatabase();
+    // try {
+    //   onValue(ref(db, "/users/" + firebase.auth().currentUser.uid), (r) => {
+    //     
+    //     setTimeout(() => {
+    //       console.log("!!!!!!");
+    //       console.log(`${r.val().user}Page`);
+    //     }, 3000)
+    //   });
+    // } catch {}
+
+
   };
 
   return (
@@ -87,8 +83,3 @@ const styles = StyleSheet.create({
     height: 100,
   },
 });
-
-
-
-////
-

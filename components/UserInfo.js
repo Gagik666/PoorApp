@@ -4,14 +4,13 @@ import { firebase } from "../config";
 import { getDatabase, ref, onValue } from "firebase/database";
 
 const UserInfo = () => {
-  const [firstName, setFirstName] = useState("firstname");
-  const [lastName, setLastName] = useState("lastname");
+  const [userName, setUserName] = useState("userName");
 
   const getUserInfo = () => {
     const db = getDatabase();
     onValue(ref(db, "/users/" + firebase.auth().currentUser.uid), (r) => {
-      setFirstName(r.val().firstName);
-      setLastName(r.val().lastName);
+      setUserName(r.val().userName);
+      
     });
   };
 
@@ -30,8 +29,8 @@ const UserInfo = () => {
         />
       </View>
       <View style={styles.textView}>
-        <Text>{firstName}</Text>
-        <Text>{lastName}</Text>
+        <Text>{userName}</Text>
+        
       </View>
     </View>
   );

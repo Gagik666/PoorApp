@@ -10,37 +10,15 @@ import { GetLocation } from "./src/MapPage";
 import { UserItem } from "./components/Items/UserItem";
 import { SplashScreen } from "./src/SplashScreen";
 import { WorkerStatisticInfo } from "./src/WorkerStatisticInfo";
+import {Intru1} from "./src/Intru1"
+import {Intru2} from "./src/Intru2"
+import {Intru3} from "./src/Intru3"
 import WorkerStatistic from "./src/WorkerStatistic";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 const Stack = createStackNavigator();
 
 
 
 function App() {
-
-  
-
-  const setCurentUserInfo = async (curentUser, email, password) => {
-    try {
-      await AsyncStorage.setItem("curentUser", "false");
-    } catch (eror) {
-      console.log(eror);
-    }
-  };
-
-  const autoLogin = async () => {
-    try {
-      await AsyncStorage.getItem("curentUser").then((value) => {
-        console.log(value);
-      });
-      
-    } catch (eror) {
-      console.log(eror);
-    }
-  };
-
-  // autoLogin()
-  // setCurentUserInfo()
   const [initializing, setinitializing] = useState(true);
   const [user, setUser] = useState();
 
@@ -54,19 +32,43 @@ function App() {
     return subscriber;
   }, []);
 
+  
+
   // if (initializing) return null;
+  
   return (
     <Stack.Navigator initialRouteName="SplashScreen">
       <Stack.Screen
-        name="login"
-        component={Login}
+        name="SplashScreen"
+        component={SplashScreen}
         options={{
           header: (props) => null,
         }}
       />
       <Stack.Screen
-        name="SplashScreen"
-        component={SplashScreen}
+        name="Intru1"
+        component={Intru1}
+        options={{
+          header: (props) => null,
+        }}
+      />
+      <Stack.Screen
+        name="Intru2"
+        component={Intru2}
+        options={{
+          header: (props) => null,
+        }}
+      />
+      <Stack.Screen
+        name="Intru3"
+        component={Intru3}
+        options={{
+          header: (props) => null,
+        }}
+      />
+      <Stack.Screen
+        name="login"
+        component={Login}
         options={{
           header: (props) => null,
         }}

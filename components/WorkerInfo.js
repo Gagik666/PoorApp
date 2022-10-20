@@ -1,9 +1,8 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
-import { firebase } from "../config";
-import { getDatabase, ref, set, onValue } from "firebase/database";
 
-export const WorkerInfo = ({ firstName, lastName, status }) => {
+
+export const WorkerInfo = ({ userName, status }) => {
   const [color, setColor] = useState("red");
   useEffect(() => {
     updateStatus();
@@ -26,8 +25,8 @@ export const WorkerInfo = ({ firstName, lastName, status }) => {
           />
         </View>
         <View style={styles.textView}>
-          <Text>{firstName}</Text>
-          <Text>{lastName}</Text>
+          <Text>{userName}</Text>
+         
         </View>
       </View>
 

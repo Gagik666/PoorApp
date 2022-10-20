@@ -14,13 +14,13 @@ import { ModalWindow } from "../components/ModalWindow";
 import uuid from "react-native-uuid";
 import { Loading } from "../components/Loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Input } from "../components/Input";
 
 export const Registration = () => {
   const navigation = useNavigation();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [userNam, setUserName] = useState("");
   const [inpVisible, setinpVisible] = useState("none");
   const [companyName, setCompanyName] = useState("t9");
   const [company, setCompany] = useState([""]);
@@ -28,7 +28,8 @@ export const Registration = () => {
   const [userPage, setUserPage] = useState("");
   const [modalWindow, setModalWindow] = useState(false);
   const [loadingVisible, setLoadingVisible] = useState("none");
-  const [messageVisible, setMessageVisible] = useState("none");
+  const [messageVisible, setMessageVisible] = useState("flex");
+  const [messageText, setMessageText] = useState(" ");
 
   const registerUser = async (email, password) => {
     setCurentUserInfo("true", email, password);
@@ -38,20 +39,21 @@ export const Registration = () => {
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
-          create(firstName, lastName, companyName, user, email);
+          create(userNam, companyName, user, email);
+          userStatus(user);
         });
     } catch (error) {
-      setMessageVisible("flex");
+      // setMessageVisible("flex");
+      setMessageText("invalid email or password");
       setLoadingVisible("none");
     }
   };
 
-  const create = (firstName, lastName, companyName, user, email) => {
+  const create = (userNam, companyName, user, email) => {
     let regName = /^[A-Z]{1}[A-Za-z]{1,19}$/;
     const db = getDatabase();
     set(ref(db, "users/" + firebase.auth().currentUser.uid), {
-      firstName: firstName,
-      lastName: lastName,
+      userName: userNam,
       companyName: companyName,
       email: email,
       user: user,
@@ -66,7 +68,8 @@ export const Registration = () => {
     }).then(() => {
       navigation.navigate(userPage);
       setLoadingVisible("none");
-      setMessageVisible("none");
+      // setMessageVisible("none");
+      setMessageText("");
     });
 
     if (inpVisible == "flex") {
@@ -78,12 +81,11 @@ export const Registration = () => {
     }
   };
 
-  
-
   const selectManager = () => {
     if (inpVisible == "none") {
       setinpVisible("flex");
       setUser("Manager");
+
       setUserPage("ManagerPage");
     } else {
       setinpVisible("none");
@@ -95,6 +97,7 @@ export const Registration = () => {
       setModalWindow(true);
       setinpVisible("none");
       setUser("Worker");
+
       setUserPage("WorkerPage");
     } else {
       setModalWindow(false);
@@ -118,7 +121,6 @@ export const Registration = () => {
     setUser(user);
   };
 
-
   const setCurentUserInfo = async (curentUser, email, password) => {
     try {
       await AsyncStorage.setItem("curentUser", curentUser);
@@ -129,38 +131,55 @@ export const Registration = () => {
     }
   };
 
+  const userName = (text) => {
+    setUserName(text);
+  };
+
+  const userEmail = (text) => {
+    setEmail(text);
+  };
+
+  const userPassword = (text) => {
+    setPassword(text);
+  };
+
+  const validate = () => {
+    if (user === "" || user == " ") {
+      setMessageText("select user status");
+    } if (userName === "") {
+      setMessageText("user nmae is empty");
+    } else {
+      return registerUser(email, password);
+    }
+  };
+
+  const userStatus = async (status) => {
+    try {
+      await AsyncStorage.setItem("status", status);
+    } catch (eror) {
+      console.log(eror);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Loading loading={loadingVisible} />
       <Text style={{ fontWeight: "bold", fontSize: 26 }}>Registration</Text>
       <View style={{ width: "80%", alignItems: "center" }}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="FirstName"
-          onChangeText={(firsName) => setFirstName(firsName)}
-          autoCorrect={false}
+        <Input placeHolder={"Name"} type={""} secrete={false} text={userName} />
+        <Input
+          placeHolder={"Email"}
+          type={"email-address"}
+          secrete={false}
+          text={userEmail}
         />
-        <TextInput
-          style={styles.textInput}
-          placeholder="LastName"
-          onChangeText={(lastName) => setLastName(lastName)}
-          autoCorrect={false}
+        <Input
+          placeHolder={"Password"}
+          type={" "}
+          secrete={true}
+          text={userPassword}
         />
-        <TextInput
-          style={styles.textInput}
-          placeholder="Email"
-          onChangeText={(email) => setEmail(email)}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder="Password"
-          onChangeText={(Password) => setPassword(Password)}
-          autoCapitalize="none"
-          secureTextEntry={true}
-        />
+
         <TextInput
           style={[styles.textInput, { display: inpVisible }]}
           placeholder=" Company name"
@@ -177,12 +196,9 @@ export const Registration = () => {
         selectCompany={selectCompany}
       />
       <Text style={[styles.txtMessage, { display: messageVisible }]}>
-        invalid email or password
+        {messageText}
       </Text>
-      <TouchableOpacity
-        onPress={() => registerUser(email, password)}
-        style={styles.button}
-      >
+      <TouchableOpacity onPress={() => validate()} style={styles.button}>
         <Text style={{ fontWeight: "bool", fontSize: 22 }}>REGISTRATION</Text>
       </TouchableOpacity>
       <TouchableOpacity

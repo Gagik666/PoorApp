@@ -12,8 +12,7 @@ import Slider from "@react-native-community/slider";
 const WorkerStatistic = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const [firstName, setFirstName] = useState("firstname");
-  const [lastName, setLastName] = useState("lastname");
+  const [userName, setUserName] = useState("userName");
   const [status, setstatus] = useState("status");
   const [countDay, setCountDay] = useState(0);
   const [fixRating, setFixRating] = useState(1);
@@ -44,8 +43,7 @@ const WorkerStatistic = () => {
   const getWorkerInfo = () => {
     const db = getDatabase();
     onValue(ref(db, "/users/" + route.params.uid), (r) => {
-      setFirstName(r.val().firstName);
-      setLastName(r.val().lastName);
+      setUserName(r.val().userName);
       setstatus(r.val().status);
       setCountDay(r.val().countDay);
       setDayRating(r.val().dayRating);
@@ -92,7 +90,7 @@ const WorkerStatistic = () => {
   return (
     <View style={styles.container}>
       <Headers />
-      <WorkerInfo firstName={firstName} lastName={lastName} status={status} />
+      <WorkerInfo userName={userName} status={status} />
       <View style={{ marginTop: 50 }}>
         <Statistic countDay={countDay} rating={fixRating} />
       </View>

@@ -11,8 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AntDesign } from "@expo/vector-icons";
 export const WorkerPage = () => {
   const [company, setCompany] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [rating, setRating] = useState("");
   const [companyLat, setCompanyLat] = useState(1);
@@ -34,7 +33,7 @@ export const WorkerPage = () => {
       getDayInfo();
       getLocation();
     }
-    autoLogin()
+    autoLogin();
   });
 
   useEffect(() => {
@@ -103,8 +102,7 @@ export const WorkerPage = () => {
       setCompany(r.val().companyName);
       setDay(r.val().day);
       setCountDay(r.val().countDay);
-      setFirstName(r.val().firstName);
-      setLastName(r.val().lastName);
+      setUserName(r.val().userName);
       setEmail(r.val().email);
       setRating(r.val().rating);
     });
@@ -141,10 +139,10 @@ export const WorkerPage = () => {
           `${d.getMinutes()}`
       ),
       {
-        firstName: firstName,
-        lastName: lastName,
+        userName: userName,
         email: email,
-        FullDate: `${d.getHours()}:${d.getMinutes()}  ${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`,
+        time: `${d.getHours()}:${d.getMinutes()}`,
+        FullDate: `${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`,
       }
     );
   };
@@ -205,7 +203,6 @@ export const WorkerPage = () => {
       await AsyncStorage.getItem("curentUser").then((value) => {
         console.log(value);
       });
-      
     } catch (eror) {
       console.log(eror);
     }
@@ -226,8 +223,16 @@ export const WorkerPage = () => {
           alignItems: "center",
         }}
       >
-        <TouchableOpacity style={{ backgroundColor: `${color}`, borderRadius: 50 }}>
-        <AntDesign onPress= {() => change()} name="checkcircleo" size={60} color="black" />
+        <TouchableOpacity
+          style={{ backgroundColor: `${color}`, borderRadius: 50 }}
+        >
+          <AntDesign
+            disabled={buttonInfo}
+            onPress={() => change()}
+            name="checkcircleo"
+            size={60}
+            color="black"
+          />
         </TouchableOpacity>
       </View>
     </View>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+
 import {
   FlatList,
   StyleSheet,
@@ -48,8 +49,7 @@ export const WorkerList = ({ company }) => {
             ...prev,
             {
               id: uuid.v4(),
-              firstName: childRes.val().firstName,
-              lastName: childRes.val().lastName,
+              userName: childRes.val().userName,
               status: childRes.val().status,
               uid: childRes.val().uid,
             },
@@ -58,8 +58,7 @@ export const WorkerList = ({ company }) => {
             return [
               {
                 id: uuid.v4(),
-                firstName: childRes.val().firstName,
-                lastName: childRes.val().lastName,
+                userName: childRes.val().userName,
                 status: childRes.val().status,
                 uid: childRes.val().uid,
               },
@@ -95,8 +94,7 @@ export const WorkerList = ({ company }) => {
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => openWorkerStatistic(item.uid)}>
               <WorkerInfo
-                firstName={item.firstName}
-                lastName={item.lastName}
+                userName={item.userName}
                 status={item.status}
               />
             </TouchableOpacity>

@@ -6,6 +6,7 @@ import { getDatabase } from "firebase/database";
 const firebaseConfig = {
   apiKey: "AIzaSyDEKtOP6qHXEFct04xNW3XHQ0QYM-ZJpwI",
   authDomain: "pourapp-c2b3e.firebaseapp.com",
+  databaseURL: "https://pourapp-c2b3e-default-rtdb.firebaseio.com",
   projectId: "pourapp-c2b3e",
   storageBucket: "pourapp-c2b3e.appspot.com",
   messagingSenderId: "1068020856911",

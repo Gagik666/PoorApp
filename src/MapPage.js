@@ -9,13 +9,15 @@ import { useNavigation } from "@react-navigation/native";
 export const GetLocation = () => {
   const navigation = useNavigation();
   const [company, setCompany] = useState("");
-  const [companyLat, setCompanyLat] = useState(40);
-  const [companyLong, setCompanyLong] = useState(40);
   const [uid, setUid] = useState("");
+  const [orgin, setOrgin] = React.useState({
+    latitude: 40.0,
+    longitude: 45.0,
+  });
 
   useEffect(() => {
-    setUid(firebase.auth().currentUser.uid)
-  })
+    setUid(firebase.auth().currentUser.uid);
+  });
 
   useEffect(() => {
     getCompanyInfo();
@@ -33,19 +35,16 @@ export const GetLocation = () => {
   const updateCompanyInfo = () => {
     const db = getDatabase();
     update(ref(db, "company/" + company), {
-      latitude: ("" + companyLat).slice(0, 7),
-      longitude: ("" + companyLong).slice(0, 7),
+      latitude: ("" + orgin.latitude).slice(0, 7),
+      longitude: ("" + orgin.longitude).slice(0, 7),
     }).catch((err) => {
       alert(err);
     });
-
     navigation.navigate("ManagerPage");
   };
 
-  const [orgin, setOrgin] = React.useState({
-    latitude: 40.0,
-    longitude: 45.0,
-  });
+  
+
 
   React.useEffect(() => {
     (async () => {
@@ -80,7 +79,12 @@ export const GetLocation = () => {
         <Marker
           draggable
           coordinate={orgin}
-          onDragEnd={(direction) => setOrgin(direction.nativeEvent.coordinate)}
+          onDragEnd={(e) => {
+            setOrgin({
+              latitude: e.nativeEvent.coordinate.latitude,
+              longitude: e.nativeEvent.coordinate.longitude
+            });
+          }}
         />
       </MapView>
       <TouchableOpacity
