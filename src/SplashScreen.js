@@ -29,6 +29,8 @@ export const SplashScreen = ({ navigation }) => {
       });
     } catch (eror) {
       console.log(eror);
+    }finally{
+
     }
   };
 
@@ -85,3 +87,8 @@ const styles = StyleSheet.create({
     height: 100,
   },
 });
+
+
+
+////
+
