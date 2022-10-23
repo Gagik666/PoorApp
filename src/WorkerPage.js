@@ -213,8 +213,8 @@ export const WorkerPage = () => {
       <Loading loading={loadingVisible} />
       <Headers />
       <UserInfo />
-      <View>
-        <Statistic countDay={countDay} />
+      <View style = {styles.statisticView}>
+        <Statistic countDay={countDay} rating = {rating} />
       </View>
       <View
         style={{
@@ -242,6 +242,8 @@ export const WorkerPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: "center",
+    backgroundColor: "#CED2E9",
   },
   btnStyle: {
     backgroundColor: "#0088ff",
@@ -250,4 +252,13 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 16,
   },
+  // statisticView: {
+  //   backgroundColor: "rgba(22, 23, 27, 0.45)",
+  //   width: 180,
+  //   height: 180,
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   borderRadius: 100,
+  //   marginTop: 40
+  // }
 });

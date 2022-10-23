@@ -11,6 +11,8 @@ import {
 import { getDatabase, ref, set, onValue, child } from "firebase/database";
 import uuid from "react-native-uuid";
 import { WorkerInfo } from "./WorkerInfo";
+import { Ionicons } from "@expo/vector-icons";
+
 export const WorkerList = ({ company }) => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
@@ -38,8 +40,8 @@ export const WorkerList = ({ company }) => {
     const db = getDatabase();
     const dbRef = ref(db, "/users/");
     onValue(dbRef, (res) => {
-      setLoading(true); 
-      setFilteredDataSource("")
+      setLoading(true);
+      setFilteredDataSource("");
       res.forEach((childRes) => {
         if (
           childRes.val().user == "Worker" &&
@@ -52,6 +54,7 @@ export const WorkerList = ({ company }) => {
               userName: childRes.val().userName,
               status: childRes.val().status,
               uid: childRes.val().uid,
+              email: childRes.val().email,
             },
           ]);
           setFilteredDataSource((prev) => {
@@ -61,6 +64,7 @@ export const WorkerList = ({ company }) => {
                 userName: childRes.val().userName,
                 status: childRes.val().status,
                 uid: childRes.val().uid,
+                email: childRes.val().email,
               },
               ...prev,
             ];
@@ -80,14 +84,23 @@ export const WorkerList = ({ company }) => {
   };
   return (
     <View>
-      <TextInput
-        style={styles.textInputStyle}
-        onChangeText={(text) => searchFilterFunction(text)}
-        value={search}
-        underlineColorAndroid="transparent"
-        placeholder="Search..."
-      />
-      <View style = {{height: "70%"}}>
+      <View style={styles.textImputView}>
+        <Ionicons
+          name="ios-search-circle-sharp"
+          size={50}
+          color="#058DD9"
+          style={styles.iconeSearch}
+        />
+        <TextInput
+          style={styles.textInputStyle}
+          onChangeText={(text) => searchFilterFunction(text)}
+          value={search}
+          underlineColorAndroid="transparent"
+          placeholder="Search..."
+        />
+      </View>
+
+      <View style={{ height: "70%" }}>
         <FlatList
           data={filteredDataSource}
           keyExtractor={(item) => item.id}
@@ -96,6 +109,9 @@ export const WorkerList = ({ company }) => {
               <WorkerInfo
                 userName={item.userName}
                 status={item.status}
+                email={item.email}
+                backgroundColor = "#CED2E9"
+                txtColor="#26294C"
               />
             </TouchableOpacity>
           )}
@@ -108,11 +124,20 @@ export const WorkerList = ({ company }) => {
 const styles = StyleSheet.create({
   textInputStyle: {
     height: 50,
-    borderWidth: 1,
     paddingLeft: 20,
-    marginHorizontal: 25,
-    marginTop: 50,
-    borderRadius: 25,
-    borderColor: "#EEEEE",
+    borderRadius: 50,
+    borderColor: "#CED2E9",
+  },
+  textImputView: {
+    borderRadius: 50,
+    marginVertical: 20,
+    backgroundColor: "#CED2E9",
+    marginHorizontal: 4,
+    shadowColor: "black",
+    shadowOpacity: 0.4,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 20,
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

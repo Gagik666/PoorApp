@@ -30,6 +30,7 @@ export const Registration = () => {
   const [loadingVisible, setLoadingVisible] = useState("none");
   const [messageVisible, setMessageVisible] = useState("flex");
   const [messageText, setMessageText] = useState(" ");
+  const [secrete, setSecrete] = useState(true)
 
   const registerUser = async (email, password) => {
     setCurentUserInfo("true", email, password);
@@ -50,7 +51,7 @@ export const Registration = () => {
   };
 
   const create = (userNam, companyName, user, email) => {
-    let regName = /^[A-Z]{1}[A-Za-z]{1,19}$/;
+    
     const db = getDatabase();
     set(ref(db, "users/" + firebase.auth().currentUser.uid), {
       userName: userNam,
@@ -146,7 +147,8 @@ export const Registration = () => {
   const validate = () => {
     if (user === "" || user == " ") {
       setMessageText("select user status");
-    } if (userName === "") {
+    }
+    if (userName === "") {
       setMessageText("user nmae is empty");
     } else {
       return registerUser(email, password);
@@ -161,54 +163,73 @@ export const Registration = () => {
     }
   };
 
+  const secretePassword = () => {
+    secrete ? setSecrete(false) : setSecrete(true)
+  }
+
   return (
     <View style={styles.container}>
       <Loading loading={loadingVisible} />
-      <Text style={{ fontWeight: "bold", fontSize: 26 }}>Registration</Text>
-      <View style={{ width: "80%", alignItems: "center" }}>
-        <Input placeHolder={"Name"} type={""} secrete={false} text={userName} />
-        <Input
-          placeHolder={"Email"}
-          type={"email-address"}
-          secrete={false}
-          text={userEmail}
-        />
-        <Input
-          placeHolder={"Password"}
-          type={" "}
-          secrete={true}
-          text={userPassword}
-        />
-
-        <TextInput
-          style={[styles.textInput, { display: inpVisible }]}
-          placeholder=" Company name"
-          onChangeText={(text) => setCompanyName(text)}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
+      <View style={styles.registerTop}>
+        <Text style = {styles.txtTitle}>Create Account!</Text>
       </View>
-      <SelectUser selectManager={selectManager} selectWorker={selectWorker} />
-      <ModalWindow
-        mWindow={modalWindow}
-        selectWorker={selectWorker}
-        cmpanyName={company}
-        selectCompany={selectCompany}
-      />
-      <Text style={[styles.txtMessage, { display: messageVisible }]}>
-        {messageText}
-      </Text>
-      <TouchableOpacity onPress={() => validate()} style={styles.button}>
-        <Text style={{ fontWeight: "bool", fontSize: 22 }}>REGISTRATION</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("login")}
-        style={{ marginTop: 20 }}
-      >
-        <Text style={{ fontWeight: "bool", fontSize: 16 }}>
-          I already have an account. Log In now
+      <View style={styles.registerView}>
+        <View style={{ width: "90%", alignItems: "center" }}>
+          <View style={styles.signUpView}>
+            <Text style={styles.signUpTxt}>Sign up</Text>
+          </View>
+          <Input
+            placeHolder={"Name"}
+            type={""}
+            secrete={false}
+            text={userName}
+            secr = {secretePassword}
+          />
+          <Input
+            placeHolder={"Email"}
+            type={"email-address"}
+            secrete={false}
+            text={userEmail}
+            secr = {secretePassword}
+          />
+          <Input
+            placeHolder={"Password"}
+            type={""}
+            secrete={secrete}
+            text={userPassword}
+            secr = {secretePassword}
+          />
+
+          <TextInput
+            style={[styles.textInput, { display: inpVisible }]}
+            placeholder=" Company name"
+            onChangeText={(text) => setCompanyName(text)}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+        </View>
+        <SelectUser selectManager={selectManager} selectWorker={selectWorker} />
+        <ModalWindow
+          mWindow={modalWindow}
+          selectWorker={selectWorker}
+          cmpanyName={company}
+          selectCompany={selectCompany}
+        />
+        <Text style={[styles.txtMessage, { display: messageVisible }]}>
+          {messageText}
         </Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => validate()} style={styles.button}>
+          <Text style={styles.btnTxtColor}>REGISTRATION</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("login")}
+          style={{ marginTop: 20 }}
+        >
+          <Text style={{ fontWeight: "600", fontSize: 18, lineHeight: 27, color: "#26294C" }}>
+            I already have an account. Login now
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -217,28 +238,69 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    marginTop: 100,
+    backgroundColor: "#26294C",
+  },
+  registerTop: {
+    width: "100%",
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center"
+  },
+  txtTitle: {
+    color: "#FFF",
+    width: "90%",
+    marginBottom: 16,
+    fontWeight: "600",
+    fontSize: 32,
+    height: 48
+  },
+  registerView: {
+    flex: 4,
+    width: "100%",
+    alignItems: "center",
+    backgroundColor: "#CED2E9",
+    borderTopStartRadius: 50,
+    borderTopEndRadius: 50,
   },
   textInput: {
     width: "100%",
+    backgroundColor: "#F6F6F6",
     height: 50,
     margin: 12,
-    borderWidth: 1,
     padding: 10,
     marginHorizontal: 20,
-    borderRadius: 8,
+    borderRadius: 50,
+    shadowColor: "black",
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 6 },
   },
   button: {
     marginTop: 30,
-    height: 70,
-    width: 250,
-    backgroundColor: "#026efd",
+    height: 50,
+    paddingHorizontal: 30,
+    backgroundColor: "#26294C",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 50,
   },
+  btnTxtColor: {
+    color: "#FFF",
+    fontWeight: "700",
+    fontSize: 18,
+    lineHeight: 24
+  },
   txtMessage: {
     color: "red",
     marginTop: 16,
+  },
+  signUpView: {
+    width: "100%",
+    marginTop: 20,
+  },
+  signUpTxt: {
+    fontWeight: "800",
+    fontSize: 35,
+    lineHeight: 43,
+    color: "#26294C",
   },
 });

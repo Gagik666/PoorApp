@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 export const ModalWindow = ({
   mWindow,
@@ -41,27 +42,41 @@ export const ModalWindow = ({
           <TouchableOpacity onPress={selectWorker}>
             <Text>Back</Text>
           </TouchableOpacity>
-          <TextInput
-            style={styles.textInputStyle}
-            onChangeText={(text) => searchFilterFunction(text)}
-            value={search}
-            underlineColorAndroid="transparent"
-            placeholder="Search..."
-          />
+          <View style={styles.textImputView}>
+            <Ionicons
+              name="ios-search-circle-sharp"
+              size={50}
+              color="#058DD9"
+              style={styles.iconeSearch}
+            />
+            <TextInput
+              style={styles.textInputStyle}
+              onChangeText={(text) => searchFilterFunction(text)}
+              value={search}
+              underlineColorAndroid="transparent"
+              placeholder="Search..."
+            />
+          </View>
         </View>
 
         <FlatList
           keyExtractor={(item) => item.id}
           data={cmpanyName}
           renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.touch}
-              onPress={() => {
-                selectCompany(item.text, "Worker"), selectWorker();
-              }}
-            >
-              <Text>{item.text}</Text>
-            </TouchableOpacity>
+            <View style={styles.itemView}>
+              <View style={styles.txtView}>
+                <Text>{item.text}</Text>
+              </View>
+
+              <TouchableOpacity
+                style={styles.touch}
+                onPress={() => {
+                  selectCompany(item.text, "Worker"), selectWorker();
+                }}
+              >
+                <Ionicons name="add-circle" size={45} color="#058DD9" />
+              </TouchableOpacity>
+            </View>
           )}
         />
       </View>
@@ -71,25 +86,40 @@ export const ModalWindow = ({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingVertical: 40,
     paddingHorizontal: 20,
-  },
-  touch: {
-    padding: 10,
-    marginTop: 5,
-    backgroundColor: "#00ffbf",
-    borderRadius: 10,
-    height: 50,
-    justifyContent:"center",
+    backgroundColor: "#CED2E9",
   },
   textInputStyle: {
     height: 50,
-    borderWidth: 0.5,
     paddingLeft: 20,
+    borderRadius: 50,
+    borderColor: "#CED2E9",
+  },
+  textImputView: {
+    borderRadius: 50,
+    marginVertical: 20,
+    backgroundColor: "#CED2E9",
     marginHorizontal: 4,
-    marginTop: 20,
-    borderRadius: 10,
-    borderColor: "#EEEEE",
-    marginBottom: 20,
+    shadowColor: "black",
+    shadowOpacity: 0.4,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 20,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  txtView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  itemView: {
+    flexDirection: "row",
+    marginVertical: 8,
+    alignItems: "center",
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ABABC1",
   },
 });

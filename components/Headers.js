@@ -165,7 +165,7 @@ export const Headers = () => {
             resizeBox(1);
           }}
         >
-          <Ionicons name="menu" size={24} color="#d9864b" />
+          <Ionicons name="menu" size={24} color="#FFF" />
         </TouchableOpacity>
         <Modal transparent visible={visible}>
           <SafeAreaView
@@ -207,6 +207,7 @@ const Item = (props) => <Text>{props.title}</Text>;
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#26294C",
     width: "100%",
     paddingTop: 40,
     paddingHorizontal: 16,

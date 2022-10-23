@@ -55,7 +55,7 @@ export const ManagerPage = () => {
   };
 
   return (
-    <View>
+    <View style = {{backgroundColor: "#CED2E9",}}>
       <Headers />
       <SaveLocation visible={locationVisible} click={saveLocation} />
       <UserInfo />

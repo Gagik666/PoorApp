@@ -12,20 +12,23 @@ export const Statistic = ({ countDay, rating }) => {
   const month = [31, 28, 30, 31, 31, 30, 31, 31, 30, 31, 30, 31];
   return (
     <View style={styles.container}>
-      <CircularProgress
+      <View style = {styles.statisticView}>
+        <CircularProgress
         value={countDay}
         maxValue={month[d.getMonth()]}
         radius={windowWidth / 5}
         textColor={"#fff"}
-        activeStrokeColor={"green"}
-        inActiveStrokeColor={"red"}
+        activeStrokeColor={"#14387C"}
+        inActiveStrokeColor={"#000"}
         inActiveStrokeOpacity={1}
-        inActiveStrokeWidth={15}
+        inActiveStrokeWidth={10}
         activeStrokeWidth={15}
         title={`${Math.round((countDay * 100) / month[d.getMonth()])}%`}
-        titleColor={"green"}
+        titleColor={"#FFF"}
         titleStyle={{ fontSize: 22 }}
       />
+      </View>
+      
         
           <Text style = {styles.txtRating}>{rating}</Text>
        
@@ -35,9 +38,11 @@ export const Statistic = ({ countDay, rating }) => {
 
 const styles = StyleSheet.create({
   container: {
+    width: "100%",
     flexDirection: "row", 
-    justifyContent: "space-around", 
+    justifyContent: "space-evenly", 
     alignItems: "center"
+    
   },
   txtRating: {
     fontSize: 22,
@@ -59,4 +64,13 @@ const styles = StyleSheet.create({
     height: 35,
     justifyContent: "space-between",
   },
+   statisticView: {
+    backgroundColor: "rgba(22, 23, 27, 0.45)",
+    width: 180,
+    height: 180,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 100,
+    marginTop: 40
+  }
 });

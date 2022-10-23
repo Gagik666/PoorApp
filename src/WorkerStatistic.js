@@ -13,6 +13,7 @@ const WorkerStatistic = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const [userName, setUserName] = useState("userName");
+  const [email, setEmail] = useState("email");
   const [status, setstatus] = useState("status");
   const [countDay, setCountDay] = useState(0);
   const [fixRating, setFixRating] = useState(1);
@@ -48,6 +49,7 @@ const WorkerStatistic = () => {
       setCountDay(r.val().countDay);
       setDayRating(r.val().dayRating);
       setFixRating(r.val().rating);
+      setEmail(r.val().email);
     });
   };
 
@@ -70,7 +72,7 @@ const WorkerStatistic = () => {
   };
 
   const saveRating = () => {
-    back()
+    back();
     setVisibleItem("none");
     updateRating();
     setVisableView("none");
@@ -79,19 +81,25 @@ const WorkerStatistic = () => {
 
   const ShowAllInfo = () => {
     navigation.navigate("WorkerStatisticInfo", {
-       uid: route.params.uid
-    })
-  }
+      uid: route.params.uid,
+    });
+  };
 
   const back = () => {
-    navigation.goBack(null)
-  }
+    navigation.goBack(null);
+  };
 
   return (
     <View style={styles.container}>
       <Headers />
-      <WorkerInfo userName={userName} status={status} />
-      <View style={{ marginTop: 50 }}>
+      <WorkerInfo
+        userName={userName}
+        status={status}
+        email={email}
+        backgroundColor = "#26294C"
+        txtColor="#FFF"
+      />
+      <View style = {styles.statisticView}>
         <Statistic countDay={countDay} rating={fixRating} />
       </View>
       <TouchableOpacity onPress={() => ShowAllInfo()}>
@@ -136,6 +144,7 @@ const WorkerStatistic = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#CED2E9",
   },
   btnStyle: {
     color: "white",

@@ -5,12 +5,15 @@ import { getDatabase, ref, onValue } from "firebase/database";
 
 const UserInfo = () => {
   const [userName, setUserName] = useState("userName");
+  const [user, setUser] = useState("user");
+  const [email, setEmail] = useState("email")
 
   const getUserInfo = () => {
     const db = getDatabase();
     onValue(ref(db, "/users/" + firebase.auth().currentUser.uid), (r) => {
       setUserName(r.val().userName);
-      
+      setEmail(r.val().email);
+      setUser(r.val().user);
     });
   };
 
@@ -23,14 +26,12 @@ const UserInfo = () => {
   return (
     <View style={styles.container}>
       <View style={styles.imageView}>
-        <Image
-          style={styles.image}
-          source={require("../images/userImage.png")}
-        />
+        <Image style={styles.image} source={require("../assets/person.png")} />
       </View>
       <View style={styles.textView}>
-        <Text>{userName}</Text>
-        
+        <Text style = {styles.txtUser}>{user}</Text>
+        <Text style = {styles.txtUserName}>{userName}</Text>
+        <Text style = {styles.txtEmail}>{email}</Text>
       </View>
     </View>
   );
@@ -42,7 +43,11 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     flexDirection: "row",
-    paddingTop: 16,
+    paddingVertical: 24,
+    paddingHorizontal: 20,
+    backgroundColor: "#26294C",
+    borderBottomEndRadius: 40,
+    borderBottomStartRadius: 40
   },
   image: {
     width: 120,
@@ -58,4 +63,21 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginStart: 15,
   },
+  txtUser: {
+    fontWeight: "500",
+    fontSize: 12,
+    lineHeight: 15,
+    color: "#FFF",
+    textTransform: "uppercase"
+  },
+  txtUserName: {
+    color: "#FCFCFC",
+    fontWeight: "700",
+    fontSize: 16
+  },
+  txtEmail: {
+    color: "#FFF",
+    fontWeight: "400",
+    fontSize: 12
+  }
 });

@@ -1,8 +1,13 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import React, { useEffect, useState } from "react";
 
-
-export const WorkerInfo = ({ userName, status }) => {
+export const WorkerInfo = ({
+  userName,
+  status,
+  email,
+  backgroundColor,
+  txtColor,
+}) => {
   const [color, setColor] = useState("red");
   useEffect(() => {
     updateStatus();
@@ -16,32 +21,35 @@ export const WorkerInfo = ({ userName, status }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={{ flexDirection: "row" }}>
+    <View style={[styles.container, { backgroundColor: backgroundColor }]}>
+      <View style={styles.itemView}>
         <View style={styles.imageView}>
           <Image
             style={styles.image}
-            source={require("../images/userImage.png")}
+            source={require("../assets/person.png")}
           />
         </View>
         <View style={styles.textView}>
-          <Text>{userName}</Text>
-         
+          <Text style={{ color: color }}>{status}</Text>
+          <Text style={[styles.txtUserName, {color: txtColor}]}>{userName}</Text>
+          <Text style={[styles.txtEmail, {color: txtColor}]}>{email}</Text>
         </View>
       </View>
-
-      <View style={styles.infoView}>
-        <Text style={{ color: color }}>{status}</Text>
-      </View>
+      <View style={styles.borderBottomView}></View>
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "space-around",
+    width: "100%",
+    borderBottomEndRadius: 40,
+    borderBottomStartRadius: 40,
+  },
+  itemView: {
     width: "100%",
     flexDirection: "row",
     paddingTop: 16,
+    margin: 10,
   },
   image: {
     width: 80,
@@ -57,5 +65,25 @@ const styles = StyleSheet.create({
   },
   infoView: {
     justifyContent: "center",
+  },
+  borderBottomView: {
+    width: "80%",
+    marginStart: 40,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ABABC1",
+  },
+  txtUser: {
+    fontWeight: "500",
+    fontSize: 12,
+    lineHeight: 15,
+    textTransform: "uppercase",
+  },
+  txtUserName: {
+    fontWeight: "700",
+    fontSize: 16,
+  },
+  txtEmail: {
+    fontWeight: "400",
+    fontSize: 12,
   },
 });
