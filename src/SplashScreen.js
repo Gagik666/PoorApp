@@ -35,15 +35,15 @@ export const SplashScreen = ({ navigation }) => {
     }
   };
 
-  loginUser = async (email, password, status) => {
+  loginUser = (email, password, status) => {
     try {
-      await firebase
+      firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(
           setTimeout(() => {
-            navigation.navigate(status);
-            // console.log(status);
+            navigation.navigate(`${status}Page`);
+            console.log(status);
           }, 3000)
         );
     } catch (error) {}

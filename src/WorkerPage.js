@@ -8,7 +8,16 @@ import * as Location from "expo-location";
 import { getDatabase, ref, set, onValue, update } from "firebase/database";
 import { Loading } from "../components/Loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AntDesign } from "@expo/vector-icons";
+import { Menu } from "../components/menu/Menu";
+import { VorkerButton } from "../components/VorkerButton";
+import {
+  getDate,
+  getFullYear,
+  getHours,
+  getMinutes,
+  getMonth,
+  getWorked,
+} from "../functions/Time";
 export const WorkerPage = () => {
   const [company, setCompany] = useState("");
   const [userName, setUserName] = useState("");
@@ -18,18 +27,23 @@ export const WorkerPage = () => {
   const [lat, setLat] = useState(2);
   const [companyLong, setCompanyLong] = useState(3);
   const [long, setLong] = useState(4);
-  const [color, setColor] = useState("gray");
   const [loadingVisible, setLoadingVisible] = useState("none");
-  const [buttonInfo, setButtonInfo] = useState(false);
   const [day, setDay] = useState(0.1);
   const [countDay, setCountDay] = useState(0);
-  let d = new Date();
+  const [status, setStatus] = useState("");
+  const [menuDisplay, setMenuDisplay] = useState("none");
+  const [visitDisplay, setVisitDisplay] = useState("flex");
+  const [finishDisplay, setFinishDisplay] = useState("none");
+  const [worked, setWorked] = useState("");
+  const [timeF, setTimeF] = useState("");
+  const [uid, setUid] = useState("");
 
   useEffect(() => {
     if (firebase.auth().currentUser !== null) {
+      setUid(firebase.auth().currentUser.uid)
       setTimeout(() => {
         getCompanyInfo();
-      }, 2000);
+      }, 1000);
       getDayInfo();
       getLocation();
     }
@@ -41,9 +55,25 @@ export const WorkerPage = () => {
   }, [company]);
 
   useEffect(() => {
+    if ((status === "is absent" || status === "") && day !== getDate()) {
+      setVisitDisplay("flex");
+    } else {
+      setVisitDisplay("none");
+    }
+    if (timeF === `_ _ : _ _`) {
+      setFinishDisplay("flex");
+      
+    } else {
+      setFinishDisplay("none");
+    }
+
     if (day > 0.1) {
       updateDayInfo();
     }
+
+    setTimeout(() => {
+      getTimeInfo();
+    }, 2000);
   });
 
   useEffect(() => {
@@ -54,7 +84,7 @@ export const WorkerPage = () => {
 
   const updateCountDay = () => {
     const db = getDatabase();
-    update(ref(db, "users/" + firebase.auth().currentUser.uid), {
+    update(ref(db, "users/" + uid), {
       countDay: countDay,
     });
   };
@@ -72,16 +102,14 @@ export const WorkerPage = () => {
     try {
       await AsyncStorage.getItem("day").then((value) => {
         if (value == "is present") {
-          setColor("green");
-          setButtonInfo(true);
-          update(ref(db, "users/" + firebase.auth().currentUser.uid), {
+          update(ref(db, "users/" + uid), {
             status: value,
           });
+          
         } else if (value == "is absent") {
-          update(ref(db, "users/" + firebase.auth().currentUser.uid), {
+          update(ref(db, "users/" + uid), {
             status: value,
           });
-          setColor("red");
         }
       });
     } catch (eror) {
@@ -90,22 +118,24 @@ export const WorkerPage = () => {
   };
 
   const updateDayInfo = () => {
-    if (d.getDate() !== day) {
+    if (getDate() !== day) {
       setDayInfo("is absent");
-      setButtonInfo(false);
     }
   };
 
   const getCompanyInfo = async () => {
-    const db = getDatabase();
-    onValue(ref(db, "/users/" + firebase.auth().currentUser.uid), (r) => {
-      setCompany(r.val().companyName);
-      setDay(r.val().day);
-      setCountDay(r.val().countDay);
-      setUserName(r.val().userName);
-      setEmail(r.val().email);
-      setRating(r.val().rating);
-    });
+    try {
+      const db = getDatabase();
+      onValue(ref(db, "/users/" + firebase.auth().currentUser.uid), (r) => {
+        setCompany(r.val().companyName);
+        setDay(r.val().day);
+        setCountDay(r.val().countDay);
+        setUserName(r.val().userName);
+        setEmail(r.val().email);
+        setRating(r.val().rating);
+        setStatus(r.val().status);
+      });
+    } catch (error) {}
   };
 
   const getCompanyLatLong = async () => {
@@ -130,21 +160,39 @@ export const WorkerPage = () => {
   };
 
   const creatUserInfo = () => {
+    try {
+      const db = getDatabase();
+      set(
+        ref(
+          db,
+          "usersInfo/" + `${uid}/` + `${getHours()}`
+        ),
+        {
+          userName: userName,
+          email: email,
+          time: `${getHours()}:${getMinutes()}`,
+          timeF: `_ _ : _ _`,
+          worked: `_ _ : _ _`,
+          FullDate: `${getDate()}.${getMonth()}.${getFullYear()}`,
+        }
+      );
+    } catch (error) {}
+  };
+
+  const getTimeInfo = () => {
+    try {
     const db = getDatabase();
-    set(
+    onValue(
       ref(
         db,
-        "usersInfo/" +
-          `${firebase.auth().currentUser.uid}/` +
-          `${d.getMinutes()}`
+        "usersInfo/" + `${firebase.auth().currentUser.uid}/` + `${getHours()}`
       ),
-      {
-        userName: userName,
-        email: email,
-        time: `${d.getHours()}:${d.getMinutes()}`,
-        FullDate: `${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`,
-      }
-    );
+      (r) => {
+          setTimeF(r.val().timeF);
+          
+        }
+        );
+      } catch (error) {}
   };
 
   const chacke = () => {
@@ -163,8 +211,13 @@ export const WorkerPage = () => {
 
   const updateStatus = () => {
     if (chacke() <= 20) {
-      setCountDay(countDay + 1);
+      if (status === "is present") {
+        console.log("karmir");
+      } else {
+        setCountDay(countDay + 1);
+      }
       creatUserInfo();
+
       setDayInfo("is present");
       setLoadingVisible("none");
     } else {
@@ -175,26 +228,68 @@ export const WorkerPage = () => {
 
   const updateDay = () => {
     const db = getDatabase();
-    if (day !== d.getDate() && chacke() <= 20) {
-      update(ref(db, "users/" + firebase.auth().currentUser.uid), {
-        day: d.getDate(),
+
+    if (day !== getDate() && chacke() <= 20) {
+      update(ref(db, "users/" + uid), {
+        day: getDate(),
       }).catch((err) => {
         alert(err);
       });
     }
   };
 
+  const getTime = () => {
+    const db = getDatabase();
+    onValue(
+      ref(
+        db,
+        "usersInfo/" + `${uid}/` + `${getHours()}`
+      ),
+      (r) => {
+        try {
+          setTimeout(() => {
+            update(
+              ref(
+                db,
+                "usersInfo/" +
+                  `${uid}/` +
+                  `${getHours()}`
+              ),
+              {
+                worked: getWorked(r.val().time, r.val().timeF),
+              }
+            );
+          }, 6000);
+        } catch (error) {}
+      }
+    );
+  };
+
+  const finish = async () => {
+    const db = getDatabase();
+    await update(
+      ref(
+        db,
+        "usersInfo/" + `${uid}/` + `${getHours()}`
+      ),
+      {
+        timeF: `${getHours()}:${getMinutes()}`,
+      }
+    );
+
+    setTimeout(() => {
+      getTime();
+    }, 2000);
+  };
+
   const change = () => {
     updateDay();
-
     getDayInfo();
     setLoadingVisible("flex");
     getLocation();
     getCompanyLatLong();
     setTimeout(() => {
       updateStatus();
-      console.log(chacke());
-      console.log(countDay);
     }, 5000);
   };
 
@@ -208,34 +303,49 @@ export const WorkerPage = () => {
     }
   };
 
+  const openMenu = () => {
+    setMenuDisplay("flex");
+  };
+
+  const close = () => {
+    setMenuDisplay("none");
+  };
+
   return (
-    <View style={styles.container}>
-      <Loading loading={loadingVisible} />
-      <Headers />
-      <UserInfo />
-      <View style = {styles.statisticView}>
-        <Statistic countDay={countDay} rating = {rating} />
+    <>
+      <View style={styles.container}>
+        <Loading loading={loadingVisible} />
+        <Headers openMenu={openMenu} />
+        <UserInfo />
+        <View style={{ justifyContent: "space-evenly" }}>
+          <View style={styles.statisticView}>
+            <Statistic countDay={countDay} rating={rating} />
+          </View>
+          <View
+            style={{
+              height: "50%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <VorkerButton text="I came" display={visitDisplay} click={change} />
+            <VorkerButton text="I went" display={finishDisplay} click={finish} />
+          </View>
+        </View>
       </View>
       <View
         style={{
-          height: "50%",
-          justifyContent: "center",
+          display: menuDisplay,
+          position: "absolute",
+          width: "100%",
+          height: "100%",
           alignItems: "center",
+          justifyContent: "flex-end",
         }}
       >
-        <TouchableOpacity
-          style={{ backgroundColor: `${color}`, borderRadius: 50 }}
-        >
-          <AntDesign
-            disabled={buttonInfo}
-            onPress={() => change()}
-            name="checkcircleo"
-            size={60}
-            color="black"
-          />
-        </TouchableOpacity>
+        <Menu click={close} user={uid} />
       </View>
-    </View>
+    </>
   );
 };
 
@@ -252,13 +362,4 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 16,
   },
-  // statisticView: {
-  //   backgroundColor: "rgba(22, 23, 27, 0.45)",
-  //   width: 180,
-  //   height: 180,
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   borderRadius: 100,
-  //   marginTop: 40
-  // }
 });

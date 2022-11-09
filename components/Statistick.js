@@ -12,25 +12,35 @@ export const Statistic = ({ countDay, rating }) => {
   const month = [31, 28, 30, 31, 31, 30, 31, 31, 30, 31, 30, 31];
   return (
     <View style={styles.container}>
-      <View style = {styles.statisticView}>
+      <View
+        style={[
+          styles.statisticView,
+          { width: windowWidth / 2.3, height: windowWidth / 2.3 },
+        ]}
+      >
         <CircularProgress
-        value={countDay}
-        maxValue={month[d.getMonth()]}
-        radius={windowWidth / 5}
-        textColor={"#fff"}
-        activeStrokeColor={"#14387C"}
-        inActiveStrokeColor={"#000"}
-        inActiveStrokeOpacity={1}
-        inActiveStrokeWidth={10}
-        activeStrokeWidth={15}
-        title={`${Math.round((countDay * 100) / month[d.getMonth()])}%`}
-        titleColor={"#FFF"}
-        titleStyle={{ fontSize: 22 }}
-      />
+          value={countDay}
+          maxValue={month[d.getMonth()]}
+          radius={windowWidth / 5}
+          textColor={"#fff"}
+          activeStrokeColor={"#14387C"}
+          inActiveStrokeColor={"#000"}
+          inActiveStrokeOpacity={1}
+          inActiveStrokeWidth={10}
+          activeStrokeWidth={15}
+          title={`${Math.round((countDay * 100) / month[d.getMonth()])}%`}
+          titleColor={"#FFF"}
+          titleStyle={{ fontSize: 22 }}
+        />
       </View>
-      
-        
-          <Text style = {styles.txtRating}>{rating}</Text>
+      <View
+        style={[
+          styles.viewRating,
+          { width: windowWidth / 4, height: windowWidth / 4 },
+        ]}
+      >
+        <Text style={styles.txtRating}>{rating}</Text>
+      </View>
        
     </View>
   );
@@ -39,38 +49,29 @@ export const Statistic = ({ countDay, rating }) => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    flexDirection: "row", 
-    justifyContent: "space-evenly", 
-    alignItems: "center"
-    
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
   },
   txtRating: {
-    fontSize: 22,
-    fontWeight: "bold"
+    fontWeight: "400",
+    fontSize: 30,
+    lineHeight: 36,
+    color: "#FFF",
+    fontWeight: "bold",
   },
-  redStyle: {
-    height: 15,
-    width: 15,
-    backgroundColor: "red",
-    borderRadius: 100,
-  },
-  greenStyle: {
-    height: 15,
-    width: 15,
-    backgroundColor: "green",
-    borderRadius: 100,
-  },
-  ststStyles: {
-    height: 35,
-    justifyContent: "space-between",
-  },
-   statisticView: {
+  statisticView: {
     backgroundColor: "rgba(22, 23, 27, 0.45)",
-    width: 180,
-    height: 180,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 100,
-    marginTop: 40
-  }
+  },
+  viewRating: {
+    backgroundColor: "#058DD9",
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 5,
+    borderColor: "#6ca5cf",
+  },
 });

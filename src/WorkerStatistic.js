@@ -8,6 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { getDatabase, ref, update, onValue } from "firebase/database";
 import Slider from "@react-native-community/slider";
+import { getDate } from "../functions/Time";
 
 const WorkerStatistic = () => {
   const route = useRoute();
@@ -22,7 +23,6 @@ const WorkerStatistic = () => {
   const [dayRating, setDayRating] = useState(0.1);
   const [visibleItem, setVisibleItem] = useState("none");
   const [visableView, setVisableView] = useState("flex");
-  let d = new Date();
   useEffect(() => {
     getWorkerInfo();
   }, []);
@@ -34,7 +34,7 @@ const WorkerStatistic = () => {
   }, [rating]);
 
   useEffect(() => {
-    if (d.getDate() !== dayRating) {
+    if (getDate() !== dayRating) {
       setVisableView("flex");
     } else {
       setVisableView("none");
@@ -57,7 +57,7 @@ const WorkerStatistic = () => {
     const db = getDatabase();
     if (fixRating > 0.1) {
       update(ref(db, "users/" + route.params.uid), {
-        dayRating: d.getDate(),
+        dayRating: getDate(),
       });
     }
   };
@@ -95,46 +95,51 @@ const WorkerStatistic = () => {
       <WorkerInfo
         userName={userName}
         status={status}
-        email={email}
-        backgroundColor = "#26294C"
+        email={email}z
+        backgroundColor="#26294C"
         txtColor="#FFF"
       />
-      <View style = {styles.statisticView}>
-        <Statistic countDay={countDay} rating={fixRating} />
-      </View>
-      <TouchableOpacity onPress={() => ShowAllInfo()}>
-        <Text>Show all info</Text>
-      </TouchableOpacity>
-      <View
-        style={{
-          height: "50%",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-        }}
-      >
-        <View style={styles.ratingView}>
-          <Text style={{ display: visibleItem }}>{Math.floor(rating)}</Text>
-          <Slider
-            style={[styles.slider, { display: visableView }]}
-            onValueChange={(value) => setRating(value)}
-            minimumValue={1}
-            maximumValue={5}
-          />
-          <TouchableOpacity
-            style={{ display: visibleItem }}
-            onPress={() => saveRating()}
-          >
-            <Text>Save</Text>
+      <View style={styles.contient}>
+        <View style={styles.statisticView}>
+          <Statistic countDay={countDay} rating={fixRating} />
+        </View>
+        <View style={{width: "100%", alignItems: "center"}}>
+          <TouchableOpacity onPress={() => ShowAllInfo()} style={styles.button}>
+            <Text style={styles.btnTxt}>Show all info</Text>
           </TouchableOpacity>
         </View>
-        <View>
-          <TouchableOpacity onPress={() => navigation.goBack(null)}>
-            <Ionicons
-              name="ios-return-down-back-outline"
-              size={50}
-              color="black"
+
+        <View
+          style={{
+            height: "50%",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+          }}
+        >
+          <View style={styles.ratingView}>
+            <Text style={{ display: visibleItem }}>{Math.floor(rating)}</Text>
+            <Slider
+              style={[styles.slider, { display: visableView }]}
+              onValueChange={(value) => setRating(value)}
+              minimumValue={1}
+              maximumValue={5}
             />
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={{ display: visibleItem }}
+              onPress={() => saveRating()}
+            >
+              <Text>Save</Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity onPress={() => navigation.goBack(null)}>
+              <Ionicons
+                name="ios-return-down-back-outline"
+                size={50}
+                color="black"
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
@@ -159,6 +164,23 @@ const styles = StyleSheet.create({
   slider: {
     width: "80%",
     height: 50,
+  },
+  button: {
+    width: "50%",
+    backgroundColor: "#26294C",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 50,
+    padding: 10,
+  },
+  btnTxt: {
+    fontWeight: "700",
+    fontSize: 18,
+    lineHeight: 24,
+    color: "#FFF",
+  },
+  contient: {
+    justifyContent: "space-around",
   },
 });
 

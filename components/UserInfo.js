@@ -52,12 +52,15 @@ const styles = StyleSheet.create({
   image: {
     width: 120,
     height: 120,
+    borderWidth: 5,
+    borderRadius: 100,
+    borderColor: "#FFF"
   },
   imageView: {
     justifyContent: "center",
-    width: 120,
-    height: 120,
-    borderRadius: 150,
+    alignItems: "center",
+    width: 130,
+    height: 130,
   },
   textView: {
     justifyContent: "center",

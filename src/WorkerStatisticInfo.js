@@ -35,7 +35,12 @@ export const WorkerStatisticInfo = () => {
       r.forEach((i) => {
         setWorkerStatisticInfoList((prev) => [
           ...prev,
-          { fullDate: i.val().FullDate, time: i.val().time },
+          {
+            fullDate: i.val().FullDate,
+            time: i.val().time,
+            timeF: i.val().timeF,
+            worked: i.val().worked,
+          },
         ]);
       });
     });
@@ -45,7 +50,7 @@ export const WorkerStatisticInfo = () => {
     return (html = `
   <html>
     <head>
-      <style>
+      <style >
         table {
           border-collapse: collapse;
         }
@@ -55,23 +60,34 @@ export const WorkerStatisticInfo = () => {
       </style>
     </head>
     <body>
-      <h1>${userName}</h1>
+    <div style="display: flex; flex-direction: row; align-items: center"> 
+    <h2>Employee &#8242 &#160</h2>
+    <span>${userName}</span>
+    </div> 
       <div> 
+        <table border = "1" style="width:100%; text-align: center;">
+        <tbody>
+          <tr>
+            <th>Data</th>
+            <td>Visit</td>
+            <td>Finish</td>
+            <td>Worked</td>
+          </tr>
+        </tbody>
         ${workerStatisticInfoList.map(
           (i) =>
-            `<table border = "1">
-              <tbody>
+            `<tbody> 
                 <tr>
                   <th>${i.fullDate}</th>
-                  <td> v - ${i.time}</td>
+                  <td>${i.time}</td>
+                  <td>${i.timeF}</td>
+                  <td>${i.worked}</td>
                 </tr>
-              </tbody>
-            </table>`
+              </tbody>`
         )}
+            </table>
       </div>
-      
     </body>
-    
   </html>`);
   };
 

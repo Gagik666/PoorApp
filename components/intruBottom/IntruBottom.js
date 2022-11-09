@@ -7,17 +7,15 @@ export const IntruBottom = ({
   txtPrev,
   txtNext,
   dataItem,
-next,
-prev
+  next,
+  prev,
 }) => {
   return (
     <View style={styles.container}>
       <View style={styles.viewTop}></View>
       <View style={{ alignItems: "center" }}>
         <Text style={styles.txtTitle}>{title}</Text>
-        <Text
-         style={styles.txtContaint}
-         >{text}</Text>
+        <Text style={styles.txtContaint}>{text}</Text>
       </View>
       <View style={styles.viewBottom}>
         <TouchableOpacity onPress={() => prev()}>
@@ -57,7 +55,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     width: "15%",
     height: 5,
-    marginTop: -30
+    marginTop: -30,
   },
   txtTitle: {
     color: "#17223B",

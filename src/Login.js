@@ -6,7 +6,7 @@ import { getDatabase, ref, set, onValue } from "firebase/database";
 import { Loading } from "../components/Loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Input } from "../components/Input";
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5 } from "@expo/vector-icons";
 
 export const Login = () => {
   const navigation = useNavigation();
@@ -27,6 +27,7 @@ export const Login = () => {
         .then(
           setTimeout(() => {
             getUserInfo();
+            
           }, 2000)
         );
     } catch (error) {}
@@ -45,9 +46,11 @@ export const Login = () => {
     try {
       setLoadingVisible("none");
       onValue(ref(db, "/users/" + firebase.auth().currentUser.uid), (r) => {
-        navigation.navigate(`${r.val().user}Page`);
+        navigation.navigate(`${r.val().user}Page`, {
+          uid: firebase.auth().currentUser.uid
+        });
         setMessageVisible("none");
-        userStatus(`${r.val().user}Page`);
+        userStatus(r.val().user);
       });
     } catch {
       setMessageVisible("flex");
@@ -96,10 +99,9 @@ export const Login = () => {
 
   return (
     <View style={styles.container}>
-      
       <Loading loading={loadingVisible} />
       <View style={styles.logTop}>
-      <Text style = {styles.txtTitle}>Welcome Back!</Text>
+        <Text style={styles.txtTitle}>Welcome Back!</Text>
       </View>
       <View style={styles.logBottom}>
         <View style={{ width: "80%", alignItems: "center" }}>
@@ -142,12 +144,15 @@ export const Login = () => {
         >
           Or Sign up Width
         </Text>
-        <View style = {{flexDirection: "row", alignItems: "center"}}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TouchableOpacity>
-          <Image style={{height: 50, width: 50}} source={require("../assets/google.png")} />
+            <Image
+              style={{ height: 50, width: 50 }}
+              source={require("../assets/google.png")}
+            />
           </TouchableOpacity>
           <TouchableOpacity>
-          <FontAwesome5 name="facebook" size={33} color="#1977F3" />
+            <FontAwesome5 name="facebook" size={33} color="#1977F3" />
           </TouchableOpacity>
         </View>
         <TouchableOpacity
@@ -162,7 +167,7 @@ export const Login = () => {
               color: "#26294C",
             }}
           >
-            Don't have an account? Sign up
+            Sign up
           </Text>
         </TouchableOpacity>
       </View>

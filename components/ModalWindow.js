@@ -67,15 +67,15 @@ export const ModalWindow = ({
               <View style={styles.txtView}>
                 <Text>{item.text}</Text>
               </View>
-
-              <TouchableOpacity
-                style={styles.touch}
-                onPress={() => {
-                  selectCompany(item.text, "Worker"), selectWorker();
-                }}
-              >
-                <Ionicons name="add-circle" size={45} color="#058DD9" />
-              </TouchableOpacity>
+              <View style={styles.touch}>
+                <TouchableOpacity
+                  onPress={() => {
+                    selectCompany(item.text, "Worker"), selectWorker();
+                  }}
+                >
+                  <Text style={styles.txtAdd}>+</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           )}
         />
@@ -121,5 +121,21 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#ABABC1",
+  },
+  touch: {
+    width: 40,
+    height: 40,
+    backgroundColor: "#058DD9",
+    borderRadius: 50,
+    alignItems: "center",
+    borderWidth: 5,
+    borderColor: "#6ca5cf",
+  },
+  txtAdd: {
+    fontSize: 30,
+    lineHeight: 36,
+    color: "#FFF",
+    textAlign: "center",
+    marginTop: -5
   },
 });

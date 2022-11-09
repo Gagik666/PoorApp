@@ -10,6 +10,8 @@ export const WorkerStatisticInfoList = ({ workerStatisticInfoList }) => {
           <View style={styles.item}>
             <Text>{item.fullDate}</Text>
             <Text>{`     v - ${item.time}`}</Text>
+            <Text>{`     f - ${item.timeF}`}</Text>
+            <Text>{`     w - ${item.worked}`}</Text>
           </View>
         )}
       />

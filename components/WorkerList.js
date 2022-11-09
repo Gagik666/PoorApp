@@ -83,7 +83,7 @@ export const WorkerList = ({ company }) => {
     });
   };
   return (
-    <View>
+    <View style = {{paddingHorizontal: 16}}>
       <View style={styles.textImputView}>
         <Ionicons
           name="ios-search-circle-sharp"

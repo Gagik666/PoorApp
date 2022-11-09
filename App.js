@@ -11,8 +11,7 @@ import { UserItem } from "./components/Items/UserItem";
 import { SplashScreen } from "./src/SplashScreen";
 import { WorkerStatisticInfo } from "./src/WorkerStatisticInfo";
 import {Intru1} from "./src/Intru1"
-import {Intru2} from "./src/Intru2"
-import {Intru3} from "./src/Intru3"
+
 import WorkerStatistic from "./src/WorkerStatistic";
 const Stack = createStackNavigator();
 
@@ -48,20 +47,6 @@ function App() {
       <Stack.Screen
         name="Intru1"
         component={Intru1}
-        options={{
-          header: (props) => null,
-        }}
-      />
-      <Stack.Screen
-        name="Intru2"
-        component={Intru2}
-        options={{
-          header: (props) => null,
-        }}
-      />
-      <Stack.Screen
-        name="Intru3"
-        component={Intru3}
         options={{
           header: (props) => null,
         }}
@@ -112,7 +97,6 @@ function App() {
         component={WorkerStatistic}
         options={{ header: (props) => null }}
       />
-
       <Stack.Screen
         name="WorkerStatisticInfo"
         component={WorkerStatisticInfo}

@@ -48,12 +48,15 @@ const styles = StyleSheet.create({
   itemView: {
     width: "100%",
     flexDirection: "row",
-    paddingTop: 16,
+    paddingVer: 16,
     margin: 10,
   },
   image: {
     width: 80,
     height: 80,
+    borderWidth: 5,
+    borderRadius: 100,
+    borderColor: "#383A69"
   },
   imageView: {
     justifyContent: "center",

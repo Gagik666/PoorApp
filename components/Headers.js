@@ -20,7 +20,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { getDatabase, ref, set, onValue } from "firebase/database";
 
 
-export const Headers = () => {
+export const Headers = ({openMenu}) => {
   const navigation = useNavigation();
   const [shouldShow, setShouldShow] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -38,33 +38,6 @@ export const Headers = () => {
       else if (userType === "Manager") setShouldShow(true);
     } catch (e) {}
   }, []);
-
-  const clear = async () => {
-    try {
-      await AsyncStorage.setItem("day", "");
-      await AsyncStorage.setItem("curentUser", "false");
-      await AsyncStorage.setItem("email", " ");
-      await AsyncStorage.setItem("password", " ");
-    } catch (eror) {
-      console.log(eror);
-    }
-  };
-
-  const logAuth = () => {
-    console.log(firebase.auth().currentUser);
-    firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        if (firebase.auth().currentUser === null) {
-          setTimeout(() => {
-            navigation.navigate("login");
-          }, 1000);
-          clear();
-        }
-      });
-  };
-
 
 
   function resizeBox(to) {
@@ -128,17 +101,16 @@ export const Headers = () => {
           >
             <View
               style={{
-                backgroundColor: "red",
+                backgroundColor: "#058DD9",
                 height: 5,
                 width: 5,
                 borderRadius: 50,
                 position: "absolute",
-                top: 15,
-                left: 18,
+                left: 16,
               }}
             >
             </View>
-            <MaterialIcons name="notifications" size={24} color="#d9864b" />
+            <MaterialIcons name="notifications" size={24} color="#FFF" />
           </TouchableOpacity>
         ) : null}
       </View>
@@ -162,7 +134,7 @@ export const Headers = () => {
       <View style={{ flexDirection: "row" }}>
         <TouchableOpacity
           onPress={() => {
-            resizeBox(1);
+            openMenu();
           }}
         >
           <Ionicons name="menu" size={24} color="#FFF" />
@@ -183,18 +155,6 @@ export const Headers = () => {
                   <Item title={"Set Location"} />
                 </TouchableOpacity>
               ) : null}
-              <TouchableOpacity
-                onPress={() => alert("About")}
-                style={styles.menuItemStyle}
-              >
-                <Item title={"About"} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => logAuth()}
-                style={styles.menuItemStyle}
-              >
-                <Item title={"Log Out"} />
-              </TouchableOpacity>
             </Animated.View>
           </SafeAreaView>
         </Modal>

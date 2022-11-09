@@ -5,7 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { firebase } from "../config";
 import { getDatabase, ref, set, onValue } from "firebase/database";
@@ -30,7 +30,7 @@ export const Registration = () => {
   const [loadingVisible, setLoadingVisible] = useState("none");
   const [messageVisible, setMessageVisible] = useState("flex");
   const [messageText, setMessageText] = useState(" ");
-  const [secrete, setSecrete] = useState(true)
+  const [secrete, setSecrete] = useState(true);
 
   const registerUser = async (email, password) => {
     setCurentUserInfo("true", email, password);
@@ -51,7 +51,6 @@ export const Registration = () => {
   };
 
   const create = (userNam, companyName, user, email) => {
-    
     const db = getDatabase();
     set(ref(db, "users/" + firebase.auth().currentUser.uid), {
       userName: userNam,
@@ -164,14 +163,14 @@ export const Registration = () => {
   };
 
   const secretePassword = () => {
-    secrete ? setSecrete(false) : setSecrete(true)
-  }
+    secrete ? setSecrete(false) : setSecrete(true);
+  };
 
   return (
     <View style={styles.container}>
       <Loading loading={loadingVisible} />
       <View style={styles.registerTop}>
-        <Text style = {styles.txtTitle}>Create Account!</Text>
+        <Text style={styles.txtTitle}>Create Account!</Text>
       </View>
       <View style={styles.registerView}>
         <View style={{ width: "90%", alignItems: "center" }}>
@@ -183,21 +182,21 @@ export const Registration = () => {
             type={""}
             secrete={false}
             text={userName}
-            secr = {secretePassword}
+            secr={secretePassword}
           />
           <Input
             placeHolder={"Email"}
             type={"email-address"}
             secrete={false}
             text={userEmail}
-            secr = {secretePassword}
+            secr={secretePassword}
           />
           <Input
             placeHolder={"Password"}
             type={""}
             secrete={secrete}
             text={userPassword}
-            secr = {secretePassword}
+            secr={secretePassword}
           />
 
           <TextInput
@@ -225,8 +224,15 @@ export const Registration = () => {
           onPress={() => navigation.navigate("login")}
           style={{ marginTop: 20 }}
         >
-          <Text style={{ fontWeight: "600", fontSize: 18, lineHeight: 27, color: "#26294C" }}>
-            I already have an account. Login now
+          <Text
+            style={{
+              fontWeight: "600",
+              fontSize: 18,
+              lineHeight: 27,
+              color: "#26294C",
+            }}
+          >
+            Login now
           </Text>
         </TouchableOpacity>
       </View>
@@ -244,7 +250,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flex: 1,
     justifyContent: "flex-end",
-    alignItems: "center"
+    alignItems: "center",
   },
   txtTitle: {
     color: "#FFF",
@@ -252,7 +258,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontWeight: "600",
     fontSize: 32,
-    height: 48
+    height: 48,
   },
   registerView: {
     flex: 4,
@@ -261,6 +267,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#CED2E9",
     borderTopStartRadius: 50,
     borderTopEndRadius: 50,
+    
   },
   textInput: {
     width: "100%",
@@ -287,7 +294,7 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontWeight: "700",
     fontSize: 18,
-    lineHeight: 24
+    lineHeight: 24,
   },
   txtMessage: {
     color: "red",
