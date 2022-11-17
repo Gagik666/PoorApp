@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { firebase } from "./config";
 import { Login } from "./src/Login";
 import { Registration } from "./src/Registration";
-import { WorkerPage } from "./src/WorkerPage";
+import { WorkerPage } from "./src/screens/workerPage/WorkerPage";
 import { ManagerPage } from "./src/ManagerPage";
 import { GetLocation } from "./src/MapPage";
 import { UserItem } from "./components/Items/UserItem";

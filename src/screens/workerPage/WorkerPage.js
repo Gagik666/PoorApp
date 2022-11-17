@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { firebase } from "../config";
-import { StyleSheet, View, TouchableOpacity, Text, Alert } from "react-native";
-import { Headers } from "../components/Headers";
-import UserInfo from "../components/UserInfo";
-import { Statistic } from "../components/Statistick";
+import React, { useEffect, useReducer, useState } from "react";
+import { firebase } from "../../../config";
+import { View } from "react-native";
+import { Headers } from "../../../components/Headers";
+import UserInfo from "../../../components/UserInfo";
+import { Statistic } from "../../../components/Statistick";
 import * as Location from "expo-location";
 import { getDatabase, ref, set, onValue, update } from "firebase/database";
-import { Loading } from "../components/Loading";
+import { Loading } from "../../../components/Loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Menu } from "../components/menu/Menu";
-import { VorkerButton } from "../components/VorkerButton";
+import { Menu } from "../../../components/menu/Menu";
+import { VorkerButton } from "../../../components/VorkerButton";
 import {
   getDate,
   getFullYear,
@@ -17,16 +17,23 @@ import {
   getMinutes,
   getMonth,
   getWorked,
-} from "../functions/Time";
+} from "../../../functions/Time";
+import { styles } from "./style";
+import { reduser, setDayInfo, setTimeInfoStatus } from "./index";
+
 export const WorkerPage = () => {
+
+  const [location, dispatch] = useReducer(reduser, {
+    lat: 1,
+    long: 2,
+  });
+
   const [company, setCompany] = useState("");
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [rating, setRating] = useState("");
   const [companyLat, setCompanyLat] = useState(1);
-  const [lat, setLat] = useState(2);
   const [companyLong, setCompanyLong] = useState(3);
-  const [long, setLong] = useState(4);
   const [loadingVisible, setLoadingVisible] = useState("none");
   const [day, setDay] = useState(0.1);
   const [countDay, setCountDay] = useState(0);
@@ -40,14 +47,13 @@ export const WorkerPage = () => {
 
   useEffect(() => {
     if (firebase.auth().currentUser !== null) {
-      setUid(firebase.auth().currentUser.uid)
+      setUid(firebase.auth().currentUser.uid);
       setTimeout(() => {
         getCompanyInfo();
       }, 1000);
       getDayInfo();
       getLocation();
     }
-    autoLogin();
   });
 
   useEffect(() => {
@@ -59,21 +65,17 @@ export const WorkerPage = () => {
       setVisitDisplay("flex");
     } else {
       setVisitDisplay("none");
+      setTimeInfoStatus("true");
     }
     if (timeF === `_ _ : _ _`) {
       setFinishDisplay("flex");
-      
     } else {
       setFinishDisplay("none");
     }
-
     if (day > 0.1) {
       updateDayInfo();
     }
-
-    setTimeout(() => {
-      getTimeInfo();
-    }, 2000);
+    getTimeInfoStatus();
   });
 
   useEffect(() => {
@@ -89,14 +91,6 @@ export const WorkerPage = () => {
     });
   };
 
-  const setDayInfo = async (txt) => {
-    try {
-      await AsyncStorage.setItem("day", txt);
-    } catch (eror) {
-      console.log(eror);
-    }
-  };
-
   const getDayInfo = async () => {
     const db = getDatabase();
     try {
@@ -105,8 +99,8 @@ export const WorkerPage = () => {
           update(ref(db, "users/" + uid), {
             status: value,
           });
-          
         } else if (value == "is absent") {
+          setTimeInfoStatus("false");
           update(ref(db, "users/" + uid), {
             status: value,
           });
@@ -152,61 +146,55 @@ export const WorkerPage = () => {
       const {
         coords: { latitude, longitude },
       } = await Location.getCurrentPositionAsync();
-      setLat(latitude);
-      setLong(longitude);
+      dispatch({
+        type: "change",
+        payload: {
+          lat: latitude,
+          long: longitude,
+        },
+      });
     } catch (error) {
-      Alert.alert("error", "eror location");
+      console.log("eror location");
     }
   };
 
   const creatUserInfo = () => {
+    const db = getDatabase();
+    set(ref(db, "usersInfo/" + `${uid}/` + `${getDate()}`), {
+      userName: userName,
+      email: email,
+      time: `${getHours()}:${getMinutes()}`,
+      timeF: `_ _ : _ _`,
+      worked: `_ _ : _ _`,
+      FullDate: `${getDate()}.${getMonth()}.${getFullYear()}`,
+    });
+  };
+
+  const getTimeInfo = () => {
     try {
       const db = getDatabase();
-      set(
+      onValue(
         ref(
           db,
-          "usersInfo/" + `${uid}/` + `${getHours()}`
+          "usersInfo/" + `${firebase.auth().currentUser.uid}/` + `${getDate()}`
         ),
-        {
-          userName: userName,
-          email: email,
-          time: `${getHours()}:${getMinutes()}`,
-          timeF: `_ _ : _ _`,
-          worked: `_ _ : _ _`,
-          FullDate: `${getDate()}.${getMonth()}.${getFullYear()}`,
+        (r) => {
+          setTimeF(r.val().timeF);
         }
       );
     } catch (error) {}
   };
 
-  const getTimeInfo = () => {
-    try {
-    const db = getDatabase();
-    onValue(
-      ref(
-        db,
-        "usersInfo/" + `${firebase.auth().currentUser.uid}/` + `${getHours()}`
-      ),
-      (r) => {
-          setTimeF(r.val().timeF);
-          
-        }
-        );
-      } catch (error) {}
-  };
-
   const chacke = () => {
-    const R = 6371e3; // metres
     const φ1 = (companyLat * Math.PI) / 180; // φ, λ in radians
     const φ2 = (companyLong * Math.PI) / 180;
-    const Δφ = ((lat - companyLat) * Math.PI) / 180;
-    const Δλ = ((long - companyLong) * Math.PI) / 180;
-
+    const Δφ = ((location.state.lat - companyLat) * Math.PI) / 180;
+    const Δλ = ((location.state.long - companyLong) * Math.PI) / 180;
     const a =
       Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
       Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
+    return 6371e3 * c;
   };
 
   const updateStatus = () => {
@@ -219,6 +207,7 @@ export const WorkerPage = () => {
       creatUserInfo();
 
       setDayInfo("is present");
+      setTimeInfoStatus("true");
       setLoadingVisible("none");
     } else {
       setLoadingVisible("none");
@@ -240,42 +229,22 @@ export const WorkerPage = () => {
 
   const getTime = () => {
     const db = getDatabase();
-    onValue(
-      ref(
-        db,
-        "usersInfo/" + `${uid}/` + `${getHours()}`
-      ),
-      (r) => {
-        try {
-          setTimeout(() => {
-            update(
-              ref(
-                db,
-                "usersInfo/" +
-                  `${uid}/` +
-                  `${getHours()}`
-              ),
-              {
-                worked: getWorked(r.val().time, r.val().timeF),
-              }
-            );
-          }, 6000);
-        } catch (error) {}
-      }
-    );
+    onValue(ref(db, "usersInfo/" + `${uid}/` + `${getHours()}`), (r) => {
+      try {
+        setTimeout(() => {
+          update(ref(db, "usersInfo/" + `${uid}/` + `${getHours()}`), {
+            worked: getWorked(r.val().time, r.val().timeF),
+          });
+        }, 6000);
+      } catch (error) {}
+    });
   };
 
   const finish = async () => {
     const db = getDatabase();
-    await update(
-      ref(
-        db,
-        "usersInfo/" + `${uid}/` + `${getHours()}`
-      ),
-      {
-        timeF: `${getHours()}:${getMinutes()}`,
-      }
-    );
+    await update(ref(db, "usersInfo/" + `${uid}/` + `${getHours()}`), {
+      timeF: `${getHours()}:${getMinutes()}`,
+    });
 
     setTimeout(() => {
       getTime();
@@ -293,22 +262,27 @@ export const WorkerPage = () => {
     }, 5000);
   };
 
-  const autoLogin = async () => {
-    try {
-      await AsyncStorage.getItem("curentUser").then((value) => {
-        console.log(value);
-      });
-    } catch (eror) {
-      console.log(eror);
-    }
-  };
-
   const openMenu = () => {
     setMenuDisplay("flex");
   };
 
   const close = () => {
     setMenuDisplay("none");
+  };
+
+  const getTimeInfoStatus = async () => {
+    const db = getDatabase();
+    try {
+      await AsyncStorage.getItem("timeInfo").then((value) => {
+        if (value == `true`) {
+          setTimeout(() => {
+            getTimeInfo();
+          }, 2000);
+        }
+      });
+    } catch (eror) {
+      console.log(eror);
+    }
   };
 
   return (
@@ -329,7 +303,11 @@ export const WorkerPage = () => {
             }}
           >
             <VorkerButton text="I came" display={visitDisplay} click={change} />
-            <VorkerButton text="I went" display={finishDisplay} click={finish} />
+            <VorkerButton
+              text="I went"
+              display={finishDisplay}
+              click={finish}
+            />
           </View>
         </View>
       </View>
@@ -348,18 +326,3 @@ export const WorkerPage = () => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    backgroundColor: "#CED2E9",
-  },
-  btnStyle: {
-    backgroundColor: "#0088ff",
-    color: "white",
-    borderRadius: 20,
-    padding: 10,
-    fontSize: 16,
-  },
-});

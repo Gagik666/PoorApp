@@ -5,8 +5,12 @@ import { useRoute } from "@react-navigation/native";
 import { WorkerStatisticInfoList } from "../components/Lists/WorkerStatisticInfoList";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+
 export const WorkerStatisticInfo = () => {
   const route = useRoute();
+  const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [rating, setRating] = useState(0);
@@ -29,6 +33,7 @@ export const WorkerStatisticInfo = () => {
   };
 
   const getWorkerInfoList = () => {
+    
     setWorkerStatisticInfoList("");
     const db = getDatabase();
     onValue(ref(db, "/usersInfo/" + route.params.uid), (r) => {
@@ -103,18 +108,30 @@ export const WorkerStatisticInfo = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text>{userName}</Text>
-        <Text>{email}</Text>
-        <Text>{rating}</Text>
+      <View style={styles.viewTop}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <MaterialIcons name="chevron-left" size={24} color="#FFF" />
+        </TouchableOpacity>
+      </View> 
+        <View>
+          <Text style = {styles.txt}>{userName}</Text>
+          <Text style = {styles.txt}>{email}</Text>
+        </View>
+        <View style = {styles.viewRating}>
+          <Text style = {styles.txt}>{rating}</Text>
+        </View>
       </View>
-      <View style={{ height: "85%", width: "95%" }}>
+      <View style={{ flex: 9, width: "95%", marginTop: 10}}>
         <WorkerStatisticInfoList
           workerStatisticInfoList={workerStatisticInfoList}
         />
       </View>
-      <TouchableOpacity>
-        <Text onPress={() => generatedPdf()}>Generated</Text>
+      <View style={{ flex: 1, width: "95%", alignItems: "center"}}>
+        <TouchableOpacity style = {styles.button}>
+        <Text style = {styles.btnTxtColor} onPress={() => generatedPdf()}>Generated</Text>
       </TouchableOpacity>
+      </View>
+      
     </View>
   );
 };
@@ -122,12 +139,49 @@ export const WorkerStatisticInfo = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 50,
     alignItems: "center",
+    backgroundColor: "#CED2E9"
   },
   header: {
-    width: "70%",
+    flex: 1,
+    paddingTop: 50,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
+    width: "100%",
+    alignItems: "center",
+    backgroundColor: "#26294C",
+    borderBottomEndRadius: 40,
+    borderBottomStartRadius: 40,
+  },
+  txt: {
+    fontWeight: "500",
+    fontSize: 12,
+    lineHeight: 15,
+    color: "#FFF",
+    textTransform: "uppercase",
+  },
+  viewRating: {
+    width: 50,
+    height: 50,
+    backgroundColor: "#058DD9",
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 5,
+    borderColor: "#6ca5cf",
+  },
+  button: {
+    height: 50,
+    paddingHorizontal: 30,
+    backgroundColor: "#26294C",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 50,
+  },
+  btnTxtColor: {
+    color: "#FFF",
+    fontWeight: "700",
+    fontSize: 18,
+    lineHeight: 24,
   },
 });

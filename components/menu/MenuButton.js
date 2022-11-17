@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
     txtText: {
         fontWeight: "400",
         fontSize: 18,
-        height: 21,
         color: "#000"
     }
 })

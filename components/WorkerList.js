@@ -30,6 +30,7 @@ export const WorkerList = ({ company }) => {
         return itemData.indexOf(textData) > -1;
       });
       setFilteredDataSource(newData);
+      console.log(newData);
       setSearch(text);
     } else {
       setFilteredDataSource(masterDataSource);
@@ -57,8 +58,8 @@ export const WorkerList = ({ company }) => {
               email: childRes.val().email,
             },
           ]);
-          setFilteredDataSource((prev) => {
-            return [
+          setFilteredDataSource((prev) => [
+             ...prev,
               {
                 id: uuid.v4(),
                 userName: childRes.val().userName,
@@ -66,9 +67,7 @@ export const WorkerList = ({ company }) => {
                 uid: childRes.val().uid,
                 email: childRes.val().email,
               },
-              ...prev,
-            ];
-          });
+            ]);
         }
       });
     });
